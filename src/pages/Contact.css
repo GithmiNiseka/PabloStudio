@@ -1,0 +1,759 @@
+/* Contact.css - Black & White Theme with Animations */
+.contact-page {
+    background: #ffffff;
+    color: #000000;
+    min-height: 100vh;
+    position: relative;
+}
+
+.contact-layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* Hero Section - More space, larger text */
+.contact-hero {
+    padding: 150px 0 20px; /* Increased padding for more space */
+    border-bottom: 1px solid #e0e0e0;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-hero.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.contact-title {
+    font-size: 6.5rem !important; /* Much larger */
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 25px;
+    line-height: 1.1;
+}
+
+.contact-description {
+    font-size: 1.3rem !important; /* Larger subtitle */
+    color: #666;
+    max-width: 800px;
+    line-height: 1.5;
+    font-weight: 300;
+}
+
+/* Contact Columns Layout - Animated */
+.contact-grid-section {
+    padding: 80px 0;
+    border-bottom: 1px solid #e0e0e0;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+
+.contact-grid-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.contact-columns {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 100px; /* Increased gap */
+    align-items: start;
+}
+
+.contact-column {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* Column Titles - Larger */
+.column-title {
+    font-size: 2.2rem; /* Larger */
+    font-weight: 300;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+/* Contact Details with hover animations */
+.contact-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.contact-detail:hover {
+    padding-left: 10px;
+    border-color: #000;
+}
+
+.contact-detail:last-of-type {
+    border-bottom: none;
+}
+
+.contact-label {
+    font-size: 0.85rem; /* Slightly larger */
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+}
+
+/* Clickable Elements with Animation */
+.clickable {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clickable::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #000;
+    transition: width 0.3s ease;
+}
+
+.clickable:hover::before {
+    width: 100%;
+}
+
+.clickable:hover {
+    color: #000;
+    transform: translateX(5px);
+}
+
+.clickable.clicked {
+    animation: clickPulse 0.2s ease;
+}
+
+@keyframes clickPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.contact-value {
+    font-size: 1.3rem; /* Larger */
+    color: #000;
+    text-decoration: none;
+    line-height: 1.4;
+    transition: all 0.3s ease;
+}
+
+/* Social Links */
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.social-link {
+    font-size: 1.2rem; /* Larger */
+    color: #000;
+    text-decoration: none;
+    padding: 5px 0;
+}
+
+/* Map Column - Animated */
+.map-column {
+    height: 100%;
+    opacity: 0;
+    transform: translateX(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
+}
+
+.map-column.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.map-container {
+    width: 100%;
+    height: 450px; /* Taller map */
+    border-radius: 8px;
+    overflow: hidden;
+    filter: grayscale(100%) contrast(120%);
+    margin-bottom: 10px;
+    transition: all 0.5s ease;
+}
+
+.map-container:hover {
+    filter: grayscale(50%) contrast(110%);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.map-note {
+    font-size: 0.9rem; /* Slightly larger */
+    color: #666;
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* FAQ Section - Animated */
+.faq-section {
+    padding: 100px 0; /* More space */
+    border-bottom: 1px solid #e0e0e0;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s;
+}
+
+.faq-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.faq-header {
+    margin-bottom: 60px;
+}
+
+.faq-title {
+    font-size: 2.5rem; /* Larger */
+    font-weight: 300;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+.faq-subtitle {
+    font-size: 1.1rem; /* Larger */
+    color: #666;
+}
+
+.faq-questions {
+    max-width: 900px; /* Wider */
+    margin: 0 auto;
+}
+
+.faq-item {
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    background: rgba(0, 0, 0, 0.01);
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    width: 100%;
+    padding: 30px 0; /* More padding */
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-size: 1.4rem; /* Larger */
+    font-weight: 400;
+    color: #000;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.faq-question:hover {
+    color: #000;
+    padding-left: 10px;
+}
+
+.faq-question.active {
+    color: #000;
+}
+
+.question-text {
+    flex: 1;
+    padding-right: 30px;
+}
+
+.expand-icon {
+    font-size: 2rem; /* Larger */
+    font-weight: 300;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+}
+
+.faq-question.active .expand-icon {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faq-answer.open {
+    max-height: 500px;
+}
+
+.answer-content {
+    padding: 0 0 30px 0;
+    font-size: 1.1rem; /* Larger */
+    color: #666;
+    line-height: 1.7;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.answer-content p {
+    margin: 0;
+}
+
+/* Floating WhatsApp with Fixed Animation */
+.floating-whatsapp {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background: #000;
+    color: #fff;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    z-index: 1000;
+    width: 70px;
+    height: 70px;
+    padding: 0;
+}
+
+.floating-whatsapp:hover {
+    width: 320px;
+    background: #111;
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.4);
+    padding: 0;
+}
+
+/* WhatsApp Icon Container */
+.whatsapp-icon-container {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.floating-whatsapp:hover .whatsapp-icon-container {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.whatsapp-icon {
+    width: 36px;
+    height: 36px;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* WhatsApp Text - COMPLETELY FIXED */
+.whatsapp-text {
+    display: flex;
+    flex-direction: column;
+    padding: 0 25px 0 0;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+    white-space: nowrap;
+    width: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.floating-whatsapp:hover .whatsapp-text {
+    opacity: 1;
+    transform: translateX(0);
+    width: auto;
+    visibility: visible;
+}
+
+.text-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.text-message {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    white-space: nowrap;
+}
+
+/* Floating Button Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.floating-whatsapp {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 1200px) {
+    .contact-title {
+        font-size: 4rem;
+    }
+    
+    .contact-columns {
+        gap: 80px;
+    }
+}
+
+@media (max-width: 992px) {
+    .contact-columns {
+        grid-template-columns: 1fr;
+        gap: 80px;
+    }
+    
+    .map-column {
+        transform: translateY(30px);
+    }
+    
+    .map-column.visible {
+        transform: translateY(0);
+    }
+    
+    .map-container {
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-layout {
+        padding: 0 25px;
+    }
+    
+    .contact-hero {
+        padding: 120px 0 60px;
+    }
+    
+    .contact-title {
+        font-size: 3rem;
+    }
+    
+    .contact-description {
+        font-size: 1.1rem;
+    }
+    
+    .contact-grid-section {
+        padding: 60px 0;
+    }
+    
+    .contact-columns {
+        gap: 60px;
+    }
+    
+    .column-title {
+        font-size: 1.9rem;
+    }
+    
+    .contact-value {
+        font-size: 1.1rem;
+    }
+    
+    .faq-section {
+        padding: 80px 0;
+    }
+    
+    .faq-title {
+        font-size: 2rem;
+    }
+    
+    .faq-subtitle {
+        font-size: 1rem;
+    }
+    
+    .faq-question {
+        font-size: 1.2rem;
+        padding: 25px 0;
+    }
+    
+    .floating-whatsapp {
+        bottom: 25px;
+        right: 25px;
+        width: 60px;
+        height: 60px;
+    }
+    
+    .whatsapp-icon-container {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .whatsapp-icon {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .floating-whatsapp:hover {
+        width: 280px;
+    }
+    
+    .whatsapp-text {
+        padding-right: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-title {
+        font-size: 2.5rem;
+    }
+    
+    .contact-description {
+        font-size: 1rem;
+    }
+    
+    .column-title {
+        font-size: 1.7rem;
+    }
+    
+    .faq-title {
+        font-size: 1.8rem;
+    }
+    
+    .map-container {
+        height: 300px;
+    }
+    
+    .floating-whatsapp {
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+    }
+    
+    .whatsapp-icon-container {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .whatsapp-icon {
+        width: 26px;
+        height: 26px;
+    }
+    
+    .floating-whatsapp:hover {
+        width: 250px;
+    }
+    
+    .whatsapp-text {
+        padding-right: 15px;
+    }
+    
+    .text-title {
+        font-size: 0.85rem;
+    }
+    
+    .text-message {
+        font-size: 0.8rem;
+    }
+}
+/* Add this to your Contact.css - Just the WhatsApp section */
+
+/* Floating WhatsApp - SIMPLE FIX */
+.floating-whatsapp {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background: #000;
+    color: #fff;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    z-index: 1000;
+    width: 70px;
+    height: 70px;
+    padding: 0;
+}
+
+/* HOVER STATE - EXPANDS */
+.floating-whatsapp:hover,
+.floating-whatsapp.hover {
+    width: 320px !important;
+    background: #111;
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* WhatsApp Icon */
+.whatsapp-icon-container {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.whatsapp-icon {
+    width: 36px;
+    height: 36px;
+    color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.floating-whatsapp:hover .whatsapp-icon,
+.floating-whatsapp.hover .whatsapp-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* WhatsApp Text */
+.whatsapp-text {
+    display: flex;
+    flex-direction: column;
+    padding-right: 25px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.4s ease 0.1s;
+    white-space: nowrap;
+    visibility: hidden;
+    max-width: 0;
+    overflow: hidden;
+}
+
+/* SHOW TEXT ON HOVER */
+.floating-whatsapp:hover .whatsapp-text,
+.floating-whatsapp.hover .whatsapp-text {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    visibility: visible !important;
+    max-width: 250px !important;
+}
+
+.text-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.text-message {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    white-space: nowrap;
+}
+
+/* Remove the old clickable class interference */
+.floating-whatsapp.clicked {
+    animation: none !important;
+}
+
+/* Floating Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.floating-whatsapp {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .floating-whatsapp {
+        bottom: 25px;
+        right: 25px;
+        width: 60px;
+        height: 60px;
+    }
+    
+    .floating-whatsapp:hover,
+    .floating-whatsapp.hover {
+        width: 280px !important;
+    }
+    
+    .whatsapp-icon-container {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .whatsapp-icon {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .whatsapp-text {
+        padding-right: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .floating-whatsapp {
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+    }
+    
+    .floating-whatsapp:hover,
+    .floating-whatsapp.hover {
+        width: 250px !important;
+    }
+    
+    .whatsapp-icon-container {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .whatsapp-icon {
+        width: 26px;
+        height: 26px;
+    }
+    
+    .whatsapp-text {
+        padding-right: 15px;
+    }
+}
