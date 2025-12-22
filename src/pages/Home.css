@@ -1,0 +1,1296 @@
+/* src/pages/Home.css */
+.pablo-minimal {
+    min-height: 100vh;
+    background-color: #ffffff;
+    color: #1a1a1a;
+    overflow-x: hidden;
+    position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+/* Simple Background */
+.hero-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+    opacity: 0.03;
+}
+
+.bg-shape {
+    position: absolute;
+    background: #a80000;
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(20px);
+}
+
+.shape-1 {
+    width: 300px;
+    height: 300px;
+    top: 10%;
+    left: 10%;
+    animation: float 20s infinite ease-in-out;
+}
+
+.shape-2 {
+    width: 200px;
+    height: 200px;
+    top: 60%;
+    right: 10%;
+    animation: float 25s infinite ease-in-out reverse;
+}
+
+.shape-3 {
+    width: 150px;
+    height: 150px;
+    bottom: 20%;
+    left: 20%;
+    animation: float 30s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    33% {
+        transform: translateY(-30px) rotate(120deg);
+    }
+    66% {
+        transform: translateY(30px) rotate(240deg);
+    }
+}
+
+/* Container */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    position: relative;
+    z-index: 1;
+}
+
+/* HERO SECTION */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 0 80px;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-content {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Hero Title - All text black */
+.hero-title {
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 300;
+    line-height: 1.3;
+    margin-bottom: 60px;
+    letter-spacing: -0.01em;
+    position: relative;
+    color: #1a1a1a;
+}
+
+/* Regular text in title */
+.title-part {
+    display: inline;
+    color: #1a1a1a;
+    font-weight: 300;
+    position: relative;
+    z-index: 3;
+}
+
+/* Keywords - All black text */
+.keyword {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    padding: 0 2px;
+    font-weight: 600;
+    color: #1a1a1a !important;
+    z-index: 3;
+    transition: color 0.3s ease;
+}
+
+/* Different sizes for keywords */
+.keyword-large {
+    font-size: clamp(2.8rem, 4vw, 4.5rem) !important;
+    font-weight: 700 !important;
+    margin: 0 2px;
+}
+
+.keyword-small {
+    font-size: clamp(2.2rem, 3vw, 3.5rem) !important;
+    font-weight: 600 !important;
+}
+
+/* Keyword shapes container */
+.keyword-shapes-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Base gray shape for all keywords */
+.keyword-base-shape {
+    position: absolute;
+    border-radius: 15px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.2;
+    background: #666;
+    transform: scaleX(0.95);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Moving red shape that follows hover */
+.keyword-hover-shape {
+    position: absolute;
+    border-radius: 15px;
+    z-index: 2;
+    pointer-events: none;
+    background: #a80000;
+    opacity: 0;
+    transform: scaleX(0);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 10px rgba(168, 0, 0, 0.2);
+}
+
+/* Hero Actions - Buttons */
+.hero-actions {
+    margin-bottom: 80px;
+    position: relative;
+    z-index: 10;
+}
+
+.button-group {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Button Styling */
+.hero-btn {
+    text-decoration: none;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0;
+    background: transparent;
+    border: none;
+    position: relative;
+    overflow: visible;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 500;
+    z-index: 10;
+}
+
+/* View Services button - BLACK text and border */
+.view-services-btn {
+    color: #1a1a1a;
+}
+
+/* Get Quote button - RED text and border */
+.get-quote-btn {
+    color: #a80000;
+}
+
+.btn-text {
+    display: block;
+    padding: 18px 0;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+    font-weight: 500;
+}
+
+/* Button line - Only bottom border (HOVER ANIMATIONS ONLY) */
+.btn-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #1a1a1a;
+    transform-origin: left;
+    transform: scaleX(0); /* Hidden by default */
+    transition: transform 0.3s ease;
+}
+
+/* Red line for Get Quote button */
+.red-line {
+    background: #a80000;
+}
+
+/* Button hover effects - Line appears on hover */
+.hero-btn:hover .btn-line {
+    transform: scaleX(1);
+}
+
+.button-separator {
+    color: rgba(26, 26, 26, 0.3);
+    font-size: 1.8rem;
+    font-weight: 200;
+    user-select: none;
+    padding: 0 15px;
+}
+
+/* Button particles */
+.button-particle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1000;
+    animation: particleFloat 0.6s ease-out forwards;
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* SERVICES SHOWCASE SECTION */
+.services-showcase {
+    padding: 120px 0;
+    position: relative;
+    z-index: 5;
+    background: #ffffff;
+}
+
+.services-showcase .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.services-showcase .services-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+}
+
+/* Left side: Explanation */
+.services-explanation {
+    padding: 40px 0;
+}
+
+.explanation-header {
+    margin-bottom: 40px;
+}
+
+.explanation-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    color: #1a1a1a;
+}
+
+.highlight-red {
+    color: #a80000;
+    font-weight: 500;
+}
+
+.explanation-underline {
+    width: 80px;
+    height: 3px;
+    background: #a80000;
+}
+
+.explanation-body {
+    padding-right: 40px;
+}
+
+.explanation-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.explanation-features {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 50px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    color: #1a1a1a;
+}
+
+.feature-icon {
+    width: 24px;
+    height: 24px;
+    background: #a80000;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.explanation-cta {
+    margin-top: 40px;
+}
+
+.explanation-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #a80000;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 12px 0;
+    position: relative;
+}
+
+.explanation-btn:hover {
+    gap: 15px;
+}
+
+.explanation-arrow {
+    transition: transform 0.3s ease;
+}
+
+.explanation-btn:hover .explanation-arrow {
+    transform: translateX(5px);
+}
+
+/* Right side: Services List */
+.services-list-vertical {
+    padding-left: 40px;
+    position: relative;
+}
+
+.services-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Service Item */
+.service-item-vertical {
+    padding: 25px 30px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    z-index: 10;
+}
+
+/* Text Wrapper for Oval Highlight */
+.service-text-wrapper {
+    position: relative;
+    padding: 25px 35px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100px;
+    transition: all 0.3s ease;
+}
+
+/* Enhanced Oval Highlight Animation */
+.text-highlight-oval {
+    position: absolute;
+    border-radius: 100px;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    transform-origin: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    animation: ovalFloat 3s ease-in-out infinite alternate;
+}
+
+@keyframes ovalFloat {
+    0% {
+        transform: translate(-50%, -50%) rotate(-1deg) scale(1);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(1deg) scale(1.02);
+    }
+}
+
+/* Service Titles */
+.service-title-vertical {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.3;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    letter-spacing: 0.02em;
+}
+
+/* Service Descriptions */
+.service-description-vertical {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    max-width: 300px;
+}
+
+/* Hover effects for service items */
+.service-item-vertical:hover .service-title-vertical {
+    transform: translateX(5px);
+}
+
+.service-item-vertical:hover .service-description-vertical {
+    transform: translateX(5px);
+    color: #555;
+}
+
+/* FEATURED SECTION */
+.featured-section {
+    padding: 120px 0;
+    background: #fafafa;
+    position: relative;
+    z-index: 5;
+    border-top: 1px solid rgba(26, 26, 26, 0.1);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 15px;
+    letter-spacing: -0.02em;
+    position: relative;
+    display: inline-block;
+    color: #1a1a1a;
+}
+
+.title-accent {
+    color: #a80000;
+    margin-right: 10px;
+    font-weight: 400;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.featured-card {
+    background: #ffffff;
+    border: 1px solid rgba(168, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    z-index: 5;
+}
+
+.featured-card:hover {
+    border-color: rgba(168, 0, 0, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-image {
+    height: 200px;
+    background: linear-gradient(135deg, #f5f5f5, #e5e5e5);
+    position: relative;
+}
+
+.card-content {
+    padding: 30px;
+}
+
+.card-content h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+
+.card-content p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.card-line {
+    width: 60px;
+    height: 2px;
+    background: #1a1a1a;
+    transition: width 0.3s ease;
+}
+
+.card-line.red {
+    background: #a80000;
+}
+
+.featured-card:hover .card-line {
+    width: 100px;
+}
+
+/* CTA SECTION */
+.cta-section {
+    padding: 120px 0;
+    background: #ffffff;
+    position: relative;
+    z-index: 5;
+    border-top: 1px solid rgba(26, 26, 26, 0.1);
+}
+
+.cta-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.cta-title {
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 30px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: #1a1a1a;
+}
+
+.cta-description {
+    font-size: 1.2rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 50px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.cta-btn {
+    text-decoration: none;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0;
+    background: transparent;
+    border: none;
+    position: relative;
+    overflow: visible;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 500;
+    color: #a80000;
+    transition: color 0.3s ease;
+}
+
+.cta-btn span {
+    display: block;
+    padding: 18px 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.cta-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #a80000;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.cta-btn:hover .cta-line {
+    transform: scaleX(1);
+}
+
+/* PABLO BUSINESSES SECTION */
+.business-section {
+    padding: 100px 0;
+    margin-top: 40px;
+    position: relative;
+    z-index: 5;
+    border-top: 1px solid rgba(26, 26, 26, 0.1);
+    border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+    background: #fafafa;
+}
+
+.business-container {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 50px;
+}
+
+.business-row {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+    width: fit-content;
+    margin: 0 auto;
+    position: relative;
+    transition: all 0.4s ease;
+}
+
+.business-card {
+    width: 250px;
+    height: 400px;
+    border: 2px solid;
+    border-radius: 8px;
+    padding: 25px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    will-change: transform, width;
+    z-index: 5;
+}
+
+/* Expanded card by default (PABLO STUDIO) */
+.business-card.expanded-default {
+    width: 600px !important;
+}
+
+/* Vertical Text Styling */
+.business-vertical-text {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    line-height: 1.1;
+    text-align: center;
+    white-space: pre-line;
+    transition: all 0.4s ease;
+    user-select: none;
+    color: inherit;
+    opacity: 1;
+    transform-origin: center center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Expanded Content Styling */
+.business-expanded-content {
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 30px;
+    position: relative;
+    z-index: 2;
+}
+
+.business-header {
+    margin-bottom: 25px;
+    width: 100%;
+    text-align: left;
+}
+
+/* Horizontal Title when expanded */
+.business-title-horizontal {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    text-align: left;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.business-subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 400;
+    font-style: italic;
+    text-align: left;
+}
+
+.business-divider {
+    width: 60px;
+    height: 3px;
+    margin-top: 15px;
+    margin-left: 0;
+}
+
+.business-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: flex-start;
+    padding-top: 10px;
+}
+
+.business-description {
+    margin-bottom: 15px;
+}
+
+.business-description p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #666;
+    text-align: left;
+}
+
+.business-features {
+    margin-top: 10px;
+}
+
+.business-features h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: left;
+}
+
+.business-features ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.business-features li {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.business-feature-icon {
+    color: #a80000;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.business-cta {
+    text-align: center;
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.business-button {
+    background: transparent;
+    border: 2px solid;
+    padding: 10px 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    min-width: 180px;
+}
+
+.business-button:hover {
+    background: rgba(168, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+/* Hover effects for non-expanded cards */
+.business-card:hover:not(.business-card.expanded-default) {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Position other cards when first is expanded */
+.business-card:not(.expanded-default) {
+    transform: translateX(50px);
+}
+
+/* When second (middle) card is hovered */
+.business-row:hover .business-card:nth-child(2):not(:hover) {
+    transform: translateX(-50px);
+}
+
+.business-row:hover .business-card:nth-child(3):not(:hover) {
+    transform: translateX(50px);
+}
+
+/* When third (right) card is hovered */
+.business-row:hover .business-card:nth-child(3):hover ~ .business-card {
+    transform: translateX(-50px);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .hero-title {
+        font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+    }
+    
+    .keyword-large {
+        font-size: clamp(2.2rem, 3vw, 3.5rem) !important;
+    }
+    
+    .keyword-small {
+        font-size: clamp(1.8rem, 2.5vw, 3rem) !important;
+    }
+    
+    .services-showcase .services-content {
+        gap: 50px;
+    }
+    
+    .services-list-vertical {
+        padding-left: 20px;
+    }
+    
+    .service-title-vertical {
+        font-size: 1.6rem !important;
+    }
+    
+    .service-description-vertical {
+        font-size: 1rem !important;
+    }
+    
+    .service-text-wrapper {
+        padding: 20px 25px;
+        min-height: 90px;
+    }
+    
+    .business-card {
+        width: 220px;
+        height: 380px;
+    }
+    
+    .business-card.expanded-default {
+        width: 500px !important;
+    }
+    
+    .business-vertical-text {
+        font-size: 2.2rem;
+    }
+    
+    .business-title-horizontal {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        padding: 0 30px;
+    }
+    
+    .hero-section {
+        padding: 100px 0 60px;
+    }
+    
+    .services-showcase .services-content {
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+    
+    .explanation-body {
+        padding-right: 0;
+    }
+    
+    .services-list-vertical {
+        padding-left: 0;
+        margin-top: 40px;
+    }
+    
+    .service-item-vertical {
+        padding: 20px 25px;
+    }
+    
+    .service-text-wrapper {
+        padding: 18px 22px;
+        min-height: 80px;
+    }
+    
+    .button-group {
+        gap: 20px;
+    }
+    
+    .hero-btn {
+        font-size: 1rem;
+    }
+    
+    .btn-text {
+        padding: 15px 0;
+    }
+    
+    .business-section {
+        padding: 80px 0;
+    }
+    
+    .business-row {
+        gap: 15px;
+    }
+    
+    .business-card {
+        width: 200px;
+        height: 350px;
+        padding: 20px;
+    }
+    
+    .business-card.expanded-default {
+        width: 450px !important;
+    }
+    
+    .business-vertical-text {
+        font-size: 2rem;
+        letter-spacing: 0.1em;
+    }
+    
+    .business-expanded-content {
+        padding: 25px;
+    }
+    
+    .business-title-horizontal {
+        font-size: 1.6rem;
+    }
+    
+    .business-description p {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        margin-bottom: 40px;
+        line-height: 1.4;
+    }
+    
+    .keyword-large {
+        font-size: clamp(1.8rem, 3vw, 2.5rem) !important;
+    }
+    
+    .keyword-small {
+        font-size: clamp(1.5rem, 2.5vw, 2rem) !important;
+    }
+    
+    .hero-actions {
+        margin-bottom: 60px;
+    }
+    
+    .services-showcase {
+        margin-top: 60px;
+    }
+    
+    .service-item-vertical {
+        padding: 15px 20px;
+    }
+    
+    .service-text-wrapper {
+        padding: 15px 18px;
+        min-height: 70px;
+    }
+    
+    .service-title-vertical {
+        font-size: 1.3rem !important;
+    }
+    
+    .service-description-vertical {
+        font-size: 0.95rem !important;
+    }
+    
+    .button-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .button-separator {
+        display: none;
+    }
+    
+    .hero-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .featured-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .cta-title {
+        font-size: 2.2rem;
+    }
+    
+    .business-section {
+        padding: 60px 0;
+    }
+    
+    .business-container {
+        overflow-x: auto;
+        padding-bottom: 20px;
+    }
+    
+    .business-row {
+        padding: 0 20px;
+        justify-content: flex-start;
+        min-width: min-content;
+    }
+    
+    .business-card {
+        width: 180px;
+        height: 320px;
+        padding: 15px;
+    }
+    
+    .business-card.expanded-default {
+        width: 400px !important;
+    }
+    
+    .business-vertical-text {
+        font-size: 1.8rem;
+    }
+    
+    .business-expanded-content {
+        padding: 20px;
+    }
+    
+    .business-title-horizontal {
+        font-size: 1.4rem;
+    }
+    
+    .business-subtitle {
+        font-size: 1rem;
+    }
+    
+    .business-button {
+        padding: 8px 20px;
+        font-size: 0.8rem;
+        min-width: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 20px;
+    }
+    
+    .hero-title {
+        font-size: 1.4rem;
+        line-height: 1.5;
+    }
+    
+    .keyword-large {
+        font-size: 1.6rem !important;
+    }
+    
+    .keyword-small {
+        font-size: 1.4rem !important;
+    }
+    
+    .service-title-vertical {
+        font-size: 1.1rem !important;
+    }
+    
+    .service-description-vertical {
+        font-size: 0.9rem !important;
+    }
+    
+    .btn-text {
+        font-size: 0.9rem;
+        padding: 12px 0;
+    }
+    
+    .button-separator {
+        font-size: 1.5rem;
+    }
+    
+    .explanation-title {
+        font-size: 2rem;
+    }
+    
+    .explanation-text {
+        font-size: 1rem;
+    }
+    
+    .cta-title {
+        font-size: 1.8rem;
+    }
+    
+    .cta-description {
+        font-size: 1rem;
+    }
+    
+    .cta-btn span {
+        padding: 15px 30px;
+    }
+    
+    .business-section {
+        padding: 40px 0;
+    }
+    
+    .business-card {
+        width: 160px;
+        height: 300px;
+        padding: 15px;
+    }
+    
+    .business-card.expanded-default {
+        width: 350px !important;
+    }
+    
+    .business-vertical-text {
+        font-size: 1.6rem;
+        letter-spacing: 0.08em;
+    }
+    
+    .business-expanded-content {
+        padding: 15px;
+    }
+    
+    .business-title-horizontal {
+        font-size: 1.2rem;
+        white-space: normal;
+    }
+    
+    .business-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .business-description p {
+        font-size: 0.85rem;
+    }
+    
+    .business-features h4 {
+        font-size: 0.9rem;
+    }
+    
+    .business-features li {
+        font-size: 0.8rem;
+    }
+    
+    .business-button {
+        padding: 6px 15px;
+        font-size: 0.75rem;
+        min-width: 140px;
+    }
+}
+
+/* Font Variables */
+:root {
+    --font-serif: 'Georgia', 'Times New Roman', serif;
+    --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', monospace;
+}
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Selection Color */
+::selection {
+    background: rgba(168, 0, 0, 0.1);
+    color: #a80000;
+}
+
+::-moz-selection {
+    background: rgba(168, 0, 0, 0.1);
+    color: #a80000;
+}
+
+/* Focus styles for accessibility */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus {
+    outline: 2px solid #a80000;
+    outline-offset: 2px;
+}
+
+/* Ensure smooth transitions */
+.business-card * {
+    transition: all 0.4s ease;
+}
+
+/* Custom scrollbar for mobile */
+.business-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.business-container::-webkit-scrollbar-track {
+    background: rgba(26, 26, 26, 0.1);
+    border-radius: 3px;
+}
+
+.business-container::-webkit-scrollbar-thumb {
+    background: rgba(168, 0, 0, 0.3);
+    border-radius: 3px;
+}
+
+.business-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 0, 0, 0.5);
+}

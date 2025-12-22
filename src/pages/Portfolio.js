@@ -18,6 +18,8 @@ const Portfolio = () => {
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
     const [galleryImages, setGalleryImages] = useState([]);
+    
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
     // Define businesses (NO 'all' button)
     const businesses = [
@@ -60,17 +62,35 @@ const Portfolio = () => {
 
     const activeBusinessData = getActiveBusinessData();
 
-    // Bento layout patterns
-    const bentoPatterns = [
-        'normal', 'tall', 'wide',
-        'wide', 'large', 'normal',
-        'normal', 'tall', 'wide',
-        'tall', 'normal', 'large'
-    ];
+    // IMPROVED Bento layout patterns - better distribution, less empty space
+    const getBentoLayout = (index, totalItems) => {
+        // More balanced patterns for better space usage
+        const patterns = [
+            // Row 1 patterns
+            'normal', 'normal', 'tall',
+            // Row 2 patterns  
+            'wide', 'normal',
+            // Row 3 patterns
+            'normal', 'large',
+            // Row 4 patterns
+            'normal', 'wide',
+            // Row 5 patterns
+            'tall', 'normal', 'normal'
+        ];
+        
+        // Adjust based on total items
+        if (totalItems <= 4) {
+            // For few items, use simpler layout
+            return 'normal';
+        }
+        
+        const patternIndex = index % patterns.length;
+        return patterns[patternIndex];
+    };
 
     const getBentoClass = (index) => {
-        const patternIndex = index % bentoPatterns.length;
-        return `bento-project-item ${bentoPatterns[patternIndex]}`;
+        const bentoType = getBentoLayout(index, filteredProjects.length);
+        return `bento-project-item ${bentoType}`;
     };
 
     // Get all project images including gallery
@@ -97,12 +117,14 @@ const Portfolio = () => {
             setActiveBusiness(businessId);
         }
         
+        // Fade out animation
         gsap.to('.bento-project-item', {
             opacity: 0,
             y: 30,
             duration: 0.3,
             stagger: 0.05,
             onComplete: () => {
+                // Fade in animation
                 gsap.fromTo('.bento-project-item',
                     { opacity: 0, y: 30 },
                     {
@@ -259,14 +281,35 @@ const Portfolio = () => {
 
     // Initialize animations
     useEffect(() => {
-        gsap.from('.bento-project-item', {
-            y: 50,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: 'power2.out',
-            delay: 0.3
-        });
+        setIsInitialLoad(false);
+        
+        if (!isInitialLoad && filteredProjects.length > 0) {
+            const items = document.querySelectorAll('.bento-project-item');
+            
+            if (items.length > 0) {
+                gsap.set(items, { clearProps: 'all' });
+                
+                gsap.fromTo(items,
+                    {
+                        y: 30,
+                        opacity: 0
+                    },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        stagger: 0.1,
+                        ease: 'power2.out',
+                        delay: 0.1
+                    }
+                );
+            }
+        } else {
+            gsap.set('.bento-project-item', {
+                opacity: 1,
+                y: 0
+            });
+        }
 
         // Handle ESC key
         const handleEscKey = (e) => {
@@ -281,7 +324,7 @@ const Portfolio = () => {
 
         window.addEventListener('keydown', handleEscKey);
         return () => window.removeEventListener('keydown', handleEscKey);
-    }, [isPopupOpen, isLightboxOpen]);
+    }, [activeBusiness, isPopupOpen, isLightboxOpen]);
 
     // Handle body class for blur effect
     useEffect(() => {
@@ -306,7 +349,7 @@ const Portfolio = () => {
         <div className="portfolio-page vertical-portfolio">
             <Nav />
             
-            {/* Vertical Business Boxes - NO ALL BUTTON */}
+            {/* Vertical Business Boxes */}
             <div className="business-boxes-sidebar">
                 {businesses.map((business) => (
                     <button
@@ -316,10 +359,6 @@ const Portfolio = () => {
                         onMouseEnter={() => setHoveredBusiness(business.id)}
                         onMouseLeave={() => setHoveredBusiness(null)}
                         style={{
-                            // Show black if: 
-                            // 1. This business is active (clicked)
-                            // 2. OR user is hovering a project from this business
-                            // 3. OR user is hovering this box itself
                             backgroundColor: (activeBusiness === business.id || hoveredBusiness === business.id) ? '#000' : 'transparent',
                             color: (activeBusiness === business.id || hoveredBusiness === business.id) ? '#fff' : '#000'
                         }}
@@ -348,7 +387,7 @@ const Portfolio = () => {
                     </div>
                 </section>
 
-                {/* Bento Style Projects Grid - SHOWS ALL BY DEFAULT */}
+                {/* Bento Style Projects Grid */}
                 <section className="projects-section">
                     <div className="content-wrapper">
                         <div className="bento-projects-grid">
@@ -362,19 +401,15 @@ const Portfolio = () => {
                                     onMouseLeave={handleProjectLeave}
                                     onClick={() => handleProjectClick(project.id)}
                                 >
-                                    {/* Business indicator badge */}
-                                    <div className="project-business-badge">
-                                        {project.business === 'thotilla' ? 'Thotilla' : 
-                                         project.business === 'suvinor' ? 'Suvinor' : 
-                                         project.business === 'epablo' ? 'Pablo' : 'Project'}
-                                    </div>
-
                                     {/* Project Image */}
                                     <div className="project-image-container-bento">
                                         <img 
                                             src={project.image || '/placeholder-image.jpg'} 
                                             alt={project.title}
                                             className="project-image-bento"
+                                            onError={(e) => {
+                                                e.target.src = '/placeholder-image.jpg';
+                                            }}
                                         />
                                         <div className="image-overlay-bento"></div>
                                     </div>
@@ -467,15 +502,8 @@ const Portfolio = () => {
 
                             {/* Project Info */}
                             <div className="project-details-info">
-                                {/* Header with business info */}
+                                {/* Header */}
                                 <div className="project-details-header">
-                                    <div className="project-business-info">
-                                        <span className="project-business-label">
-                                            {selectedProject.business === 'thotilla' ? 'Thotilla' : 
-                                             selectedProject.business === 'suvinor' ? 'Suvinor' : 
-                                             selectedProject.business === 'epablo' ? 'Pablo' : 'Project'}
-                                        </span>
-                                    </div>
                                     <h1 className="project-details-title">
                                         {selectedProject.title}
                                     </h1>

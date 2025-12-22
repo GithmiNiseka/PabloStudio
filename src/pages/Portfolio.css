@@ -6,34 +6,22 @@
     position: relative;
 }
 
-/* REMOVE THESE LINES - They're causing the blank page issue */
-/* Delete or comment out these lines from your existing CSS: */
-/*
+/* FIXED: Ensure grid is visible */
 .bento-projects-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: minmax(250px, auto);
     gap: 25px;
     padding: 40px 0;
-}
-*/
-
-/* Replace with this FIXED version: */
-.bento-projects-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: minmax(250px, auto);
-    gap: 25px;
-    padding: 40px 0;
-    opacity: 1 !important; /* Force visibility */
-    visibility: visible !important; /* Force visibility */
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
-/* FIX: Ensure project items are visible by default */
+/* UPDATED: Project items - BOTTOM BORDER by default, darker on hover */
 .bento-project-item {
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid #f0f0f0;
+    border-bottom: 1px solid #e0e0e0; /* LIGHT BOTTOM BORDER BY DEFAULT */
     background: #fff;
     overflow: hidden;
     display: flex;
@@ -41,11 +29,19 @@
     height: 100%;
     min-height: 280px;
     position: relative;
-    opacity: 1 !important; /* Force visibility */
-    transform: translateY(0) !important; /* Reset any transform */
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Simple Vertical Business Boxes - ALWAYS VISIBLE */
+/* Hover effect - DARKEN BOTTOM BORDER */
+.bento-project-item:hover {
+    transform: translateY(-5px);
+    border-bottom: 3px solid #000; /* DARKER BORDER ON HOVER */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Simple Vertical Business Boxes */
 .business-boxes-sidebar {
     position: fixed;
     left: 0;
@@ -125,16 +121,17 @@
     transition: all 0.3s ease;
 }
 
-/* Hero */
+/* Hero - UPDATED: Larger Portfolio title */
 .vertical-hero {
     padding: 80px 0 40px;
 }
 
 .vertical-page-title {
-    font-size: 3rem;
-    font-weight: 300;
+    font-size: 4rem; /* INCREASED FROM 3rem TO 4rem */
+    font-weight: 500;
     letter-spacing: -0.02em;
     margin-bottom: 10px;
+    margin-top: 50px !important;
     line-height: 1;
     transition: all 0.3s ease;
 }
@@ -217,30 +214,6 @@
     height: 100%;
     background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.1));
     pointer-events: none;
-}
-
-/* Business badge for project items */
-.project-business-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(0, 0, 0, 0.85);
-    color: white;
-    padding: 3px 10px;
-    font-size: 0.7rem;
-    border-radius: 3px;
-    z-index: 2;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    opacity: 0.9;
-    transition: all 0.3s ease;
-    font-weight: 500;
-}
-
-.bento-project-item:hover .project-business-badge {
-    background: rgba(0, 0, 0, 0.95);
-    opacity: 1;
-    transform: translateY(-2px);
 }
 
 /* Project Content */
@@ -359,7 +332,7 @@
     font-size: 0.9rem;
 }
 
-/* Project Details Popup - Bottom to Top Animation with Background Visible */
+/* Project Details Popup */
 .project-details-overlay {
     position: fixed;
     top: 0;
@@ -503,24 +476,6 @@
     margin-bottom: 30px;
     padding-bottom: 20px;
     border-bottom: 1px solid #f0f0f0;
-}
-
-/* Business label in popup header */
-.project-business-info {
-    margin-bottom: 8px;
-}
-
-.project-business-label {
-    font-size: 0.8rem;
-    color: #000;
-    background: #f5f5f5;
-    padding: 4px 12px;
-    border-radius: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 500;
-    display: inline-block;
-    border: 1px solid #e0e0e0;
 }
 
 .project-details-title {
@@ -902,7 +857,7 @@
     transform: scale(1.1);
 }
 
-/* Background dimming effect when popup is open */
+/* UPDATED: Background dimming effect when popup is open - INCLUDES NAV BAR */
 body.popup-open .nav,
 body.popup-open .business-boxes-sidebar,
 body.popup-open .vertical-content,
@@ -934,6 +889,10 @@ body.lightbox-open .project-details-container {
     
     .vertical-content {
         padding: 0 30px 0 50px;
+    }
+    
+    .vertical-page-title {
+        font-size: 3.5rem; /* Adjusted for tablet */
     }
     
     .bento-project-item.large {
@@ -993,6 +952,10 @@ body.lightbox-open .project-details-container {
         padding: 0 20px;
     }
     
+    .vertical-page-title {
+        font-size: 3rem; /* Adjusted for mobile */
+    }
+    
     .bento-projects-grid {
         grid-template-columns: 1fr;
         gap: 20px;
@@ -1011,10 +974,6 @@ body.lightbox-open .project-details-container {
     .bento-project-item.large .project-image-container-bento,
     .bento-project-item.wide .project-image-container-bento {
         height: 180px;
-    }
-    
-    .vertical-page-title {
-        font-size: 2.5rem;
     }
     
     .project-details-container {
@@ -1064,7 +1023,7 @@ body.lightbox-open .project-details-container {
 
 @media (max-width: 480px) {
     .vertical-page-title {
-        font-size: 2rem;
+        font-size: 2.5rem; /* Adjusted for small mobile */
     }
     
     .project-title-bento {
