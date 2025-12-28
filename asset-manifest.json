@@ -1,16 +1,17 @@
 {
   "files": {
-    "main.css": "/PabloStudio/static/css/main.9ef1a82b.css",
-    "main.js": "/PabloStudio/static/js/main.12c05e0f.js",
+    "main.css": "/PabloStudio/static/css/main.63728a21.css",
+    "main.js": "/PabloStudio/static/js/main.24d534c4.js",
     "static/js/453.0dcde838.chunk.js": "/PabloStudio/static/js/453.0dcde838.chunk.js",
+    "static/media/bg1.jpeg": "/PabloStudio/static/media/bg1.ba99ba4ad70e45d2bed2.jpeg",
     "static/media/logo.jpeg": "/PabloStudio/static/media/logo.b13d62b8c18d345bbe97.jpeg",
     "index.html": "/PabloStudio/index.html",
-    "main.9ef1a82b.css.map": "/PabloStudio/static/css/main.9ef1a82b.css.map",
-    "main.12c05e0f.js.map": "/PabloStudio/static/js/main.12c05e0f.js.map",
+    "main.63728a21.css.map": "/PabloStudio/static/css/main.63728a21.css.map",
+    "main.24d534c4.js.map": "/PabloStudio/static/js/main.24d534c4.js.map",
     "453.0dcde838.chunk.js.map": "/PabloStudio/static/js/453.0dcde838.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9ef1a82b.css",
-    "static/js/main.12c05e0f.js"
+    "static/css/main.63728a21.css",
+    "static/js/main.24d534c4.js"
   ]
 }
