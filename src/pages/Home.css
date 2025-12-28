@@ -34,7 +34,6 @@
     height: 300px;
     top: 10%;
     left: 10%;
-    animation: float 20s infinite ease-in-out;
 }
 
 .shape-2 {
@@ -42,7 +41,6 @@
     height: 200px;
     top: 60%;
     right: 10%;
-    animation: float 25s infinite ease-in-out reverse;
 }
 
 .shape-3 {
@@ -50,19 +48,6 @@
     height: 150px;
     bottom: 20%;
     left: 20%;
-    animation: float 30s infinite ease-in-out;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg);
-    }
-    33% {
-        transform: translateY(-30px) rotate(120deg);
-    }
-    66% {
-        transform: translateY(30px) rotate(240deg);
-    }
 }
 
 /* Container */
@@ -74,116 +59,219 @@
     z-index: 1;
 }
 
-/* HERO SECTION */
+/* HERO SECTION - FIXED LAYOUT WITH ANIMATIONS */
 .hero-section {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 120px 0 80px;
+    min-height: 90vh;
+    padding-top: 10px; /* Minimal gap */
     position: relative;
     z-index: 10;
+    overflow: hidden;
 }
 
 .hero-content {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* Hero Title - All text black */
-.hero-title {
-    font-size: clamp(2rem, 3vw, 3rem);
-    font-weight: 300;
-    line-height: 1.3;
-    margin-bottom: 60px;
-    letter-spacing: -0.01em;
-    position: relative;
-    color: #1a1a1a;
-}
-
-/* Regular text in title */
-.title-part {
-    display: inline;
-    color: #1a1a1a;
-    font-weight: 300;
-    position: relative;
-    z-index: 3;
-}
-
-/* Keywords - All black text */
-.keyword {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    padding: 0 2px;
-    font-weight: 600;
-    color: #1a1a1a !important;
-    z-index: 3;
-    transition: color 0.3s ease;
-}
-
-/* Different sizes for keywords */
-.keyword-large {
-    font-size: clamp(2.8rem, 4vw, 4.5rem) !important;
-    font-weight: 700 !important;
-    margin: 0 2px;
-}
-
-.keyword-small {
-    font-size: clamp(2.2rem, 3vw, 3.5rem) !important;
-    font-weight: 600 !important;
-}
-
-/* Keyword shapes container */
-.keyword-shapes-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 2;
-}
-
-/* Base gray shape for all keywords */
-.keyword-base-shape {
-    position: absolute;
-    border-radius: 15px;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0.2;
-    background: #666;
-    transform: scaleX(0.95);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Moving red shape that follows hover */
-.keyword-hover-shape {
-    position: absolute;
-    border-radius: 15px;
-    z-index: 2;
-    pointer-events: none;
-    background: #a80000;
-    opacity: 0;
-    transform: scaleX(0);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 10px rgba(168, 0, 0, 0.2);
-}
-
-/* Hero Actions - Buttons */
-.hero-actions {
-    margin-bottom: 80px;
-    position: relative;
-    z-index: 10;
-}
-
-.button-group {
     display: flex;
-    align-items: center;
-    gap: 30px;
+    flex-direction: column;
+    gap: 40px;
 }
 
-/* Button Styling */
+/* Title and Description Row */
+.hero-title-row {
+    display: flex;
+    align-items: flex-start; /* Align at top */
+    gap: 80px; /* INCREASED GAP between PABLO and description */
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* PABLO Container - Left side */
+.hero-pablo-container {
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Space between PABLO and Get Quote button */
+}
+
+.hero-pablo {
+    font-size: clamp(8rem, 15vw, 12rem); /* HUGE */
+    font-weight: 900; /* Extra bold */
+    letter-spacing: -0.04em;
+    color: #1a1a1a;
+    line-height: 0.8;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-style: normal;
+    display: flex;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+/* Individual PABLO letters for character-by-character animation */
+.pablo-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: slideUpLetter 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Animation for each letter - slides up and fades in */
+@keyframes slideUpLetter {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Stagger animation delays for each letter - CHARACTER BY CHARACTER */
+.pablo-letter:nth-child(1) { animation-delay: 0.1s; } /* P */
+.pablo-letter:nth-child(2) { animation-delay: 0.3s; } /* A */
+.pablo-letter:nth-child(3) { animation-delay: 0.5s; } /* B */
+.pablo-letter:nth-child(4) { animation-delay: 0.7s; } /* L */
+.pablo-letter:nth-child(5) { animation-delay: 0.9s; } /* O */
+
+/* studio text as superscript after O - RED COLOR */
+.hero-studio {
+    font-size: clamp(1.6rem, 2.5vw, 2rem); /* Slightly smaller */
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: #ff0000; /* CHANGED TO RED */
+    text-transform: lowercase;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    position: absolute;
+    top: 0.5em; /* Position at top of PABLO */
+    left: calc(100% - 0.3em); /* Position right after O */
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUpStudio 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 1.1s; /* Wait for PABLO letters to complete */
+}
+
+@keyframes slideUpStudio {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Get Quote Button - Below PABLO, aligned with P */
+.get-quote-left {
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUpButtons 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 1.3s; /* Wait for studio */
+    display: flex;
+    justify-content: flex-start; /* Align with P in PABLO */
+    padding-left: 5px; /* Small adjustment to align with P */
+}
+
+/* Description Container - Right side */
+.hero-description-container {
+    flex-grow: 1;
+    padding-top: 15px; /* Align with PABLO top - increased */
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Space between description and View Services button */
+    margin-left: 20px; /* ADDED: Push description more to the right */
+}
+
+.hero-description {
+    font-size: clamp(1.1rem, 1.2vw, 1.2rem);
+    line-height: 1.6;
+    color: #1a1a1a;
+    font-weight: 400; /* INCREASED WEIGHT (was 300) */
+    text-align: center; /* CENTER ALIGNED (was left) */
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0;
+    padding-left: 30px; /* ADDED: Extra padding to start text more right */
+    opacity: 0;
+    transform: translateY(40px);
+    animation: slideUpDescription 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 1.5s; /* Wait for Get Quote button */
+}
+
+@keyframes slideUpDescription {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* View Services Button - Below description, right aligned */
+.view-services-right {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUpButtons 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 1.8s; /* Wait for description */
+    display: flex;
+    justify-content: flex-end; /* Right align */
+    padding-right: 30px; /* Align with description end */
+}
+
+/* For larger screens, push description even more right */
+@media (min-width: 1201px) {
+    .hero-description-container {
+        margin-left: 40px; /* More push on large screens */
+    }
+    
+    .hero-description {
+        padding-left: 50px; /* More padding on large screens */
+    }
+    
+    .view-services-right {
+        padding-right: 50px; /* Match description padding */
+    }
+}
+
+/* Image Section - Below everything */
+.hero-image-section {
+    width: 100%;
+    margin-top: 40px; /* Increased gap */
+    opacity: 0;
+    transform: translateY(60px);
+    animation: slideUpImage 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 2.1s; /* Wait for View Services button */
+}
+
+@keyframes slideUpImage {
+    0% {
+        opacity: 0;
+        transform: translateY(60px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-image-container {
+    width: 85%; /* Wider image */
+    max-width: 950px;
+    margin-left: auto; /* Push to right */
+}
+
+.hero-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* Button Styling - Updated for separate positions */
 .hero-btn {
     text-decoration: none;
     font-size: 1.1rem;
@@ -242,31 +330,14 @@
     transform: scaleX(1);
 }
 
-.button-separator {
-    color: rgba(26, 26, 26, 0.3);
-    font-size: 1.8rem;
-    font-weight: 200;
-    user-select: none;
-    padding: 0 15px;
-}
-
-/* Button particles */
-.button-particle {
-    position: fixed;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1000;
-    animation: particleFloat 0.6s ease-out forwards;
-}
-
-@keyframes particleFloat {
+@keyframes slideUpButtons {
     0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.8;
+        opacity: 0;
+        transform: translateY(30px);
     }
     100% {
-        transform: translate(var(--tx), var(--ty)) scale(0);
-        opacity: 0;
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -276,6 +347,7 @@
     position: relative;
     z-index: 5;
     background: #ffffff;
+    margin-top: 80px;
 }
 
 .services-showcase .container {
@@ -432,20 +504,10 @@
     border-radius: 100px;
     pointer-events: none;
     z-index: -1;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.3s ease;
     transform-origin: center;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    animation: ovalFloat 3s ease-in-out infinite alternate;
-}
-
-@keyframes ovalFloat {
-    0% {
-        transform: translate(-50%, -50%) rotate(-1deg) scale(1);
-    }
-    100% {
-        transform: translate(-50%, -50%) rotate(1deg) scale(1.02);
-    }
 }
 
 /* Service Titles */
@@ -882,20 +944,152 @@
     transform: translateX(-50px);
 }
 
-/* Responsive Design */
+/* Responsive Design for Hero Section - UPDATED */
 @media (max-width: 1200px) {
-    .hero-title {
-        font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+    .hero-title-row {
+        gap: 60px;
     }
     
-    .keyword-large {
-        font-size: clamp(2.2rem, 3vw, 3.5rem) !important;
+    .hero-pablo {
+        font-size: clamp(7rem, 13vw, 10rem);
     }
     
-    .keyword-small {
-        font-size: clamp(1.8rem, 2.5vw, 3rem) !important;
+    .hero-studio {
+        font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+        top: 0.4em;
+        left: calc(100% - 0.4em); /* Adjusted for smaller PABLO */
     }
     
+    .hero-description {
+        font-size: 1.05rem;
+        max-width: 450px;
+        padding-left: 25px; /* Adjusted for medium screens */
+    }
+    
+    .hero-description-container {
+        margin-left: 15px;
+    }
+    
+    .view-services-right {
+        padding-right: 25px; /* Match description padding */
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        padding: 0 30px;
+    }
+    
+    .hero-section {
+        padding-top: 10px;
+        min-height: auto;
+    }
+    
+    .hero-title-row {
+        flex-direction: column;
+        gap: 40px;
+    }
+    
+    .hero-pablo-container {
+        width: 100%;
+    }
+    
+    .hero-studio {
+        position: relative;
+        top: 0;
+        left: 0;
+        display: block;
+        margin-left: 10px;
+        margin-top: 5px;
+    }
+    
+    .get-quote-left {
+        justify-content: flex-start;
+        padding-left: 0;
+        width: 100%;
+    }
+    
+    .hero-description-container {
+        padding-top: 0;
+        width: 100%;
+        margin-left: 0; /* Reset on mobile */
+    }
+    
+    .hero-description {
+        max-width: 100%;
+        text-align: left;
+        padding-left: 0; /* Reset on mobile */
+        padding-left: 20px; /* But still keep some padding */
+    }
+    
+    .view-services-right {
+        justify-content: flex-start; /* Left align on mobile */
+        padding-right: 0;
+        padding-left: 20px; /* Match description padding */
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding-top: 5px;
+    }
+    
+    .hero-pablo {
+        font-size: clamp(5rem, 10vw, 7rem);
+    }
+    
+    .hero-studio {
+        font-size: clamp(1.2rem, 2vw, 1.6rem);
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+        line-height: 1.6;
+        padding-left: 15px;
+    }
+    
+    .hero-image-section {
+        margin-top: 30px;
+    }
+    
+    .button-group {
+        gap: 20px;
+    }
+    
+    .hero-btn {
+        font-size: 1rem;
+    }
+    
+    .btn-text {
+        padding: 15px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 20px;
+    }
+    
+    .hero-section {
+        padding-top: 0;
+    }
+    
+    .hero-pablo {
+        font-size: 4rem;
+    }
+    
+    .hero-studio {
+        font-size: 1rem;
+    }
+    
+    .hero-description {
+        font-size: 0.95rem;
+        padding-left: 10px;
+    }
+}
+
+/* Additional responsive styles for other sections */
+@media (max-width: 1200px) {
     .services-showcase .services-content {
         gap: 50px;
     }
@@ -936,14 +1130,6 @@
 }
 
 @media (max-width: 992px) {
-    .container {
-        padding: 0 30px;
-    }
-    
-    .hero-section {
-        padding: 100px 0 60px;
-    }
-    
     .services-showcase .services-content {
         grid-template-columns: 1fr;
         gap: 60px;
@@ -965,18 +1151,6 @@
     .service-text-wrapper {
         padding: 18px 22px;
         min-height: 80px;
-    }
-    
-    .button-group {
-        gap: 20px;
-    }
-    
-    .hero-btn {
-        font-size: 1rem;
-    }
-    
-    .btn-text {
-        padding: 15px 0;
     }
     
     .business-section {
@@ -1016,24 +1190,6 @@
 }
 
 @media (max-width: 768px) {
-    .hero-title {
-        font-size: clamp(1.5rem, 4vw, 2rem);
-        margin-bottom: 40px;
-        line-height: 1.4;
-    }
-    
-    .keyword-large {
-        font-size: clamp(1.8rem, 3vw, 2.5rem) !important;
-    }
-    
-    .keyword-small {
-        font-size: clamp(1.5rem, 2.5vw, 2rem) !important;
-    }
-    
-    .hero-actions {
-        margin-bottom: 60px;
-    }
-    
     .services-showcase {
         margin-top: 60px;
     }
@@ -1053,21 +1209,6 @@
     
     .service-description-vertical {
         font-size: 0.95rem !important;
-    }
-    
-    .button-group {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-    
-    .button-separator {
-        display: none;
-    }
-    
-    .hero-btn {
-        width: 100%;
-        max-width: 300px;
     }
     
     .featured-grid {
@@ -1129,38 +1270,12 @@
 }
 
 @media (max-width: 480px) {
-    .container {
-        padding: 0 20px;
-    }
-    
-    .hero-title {
-        font-size: 1.4rem;
-        line-height: 1.5;
-    }
-    
-    .keyword-large {
-        font-size: 1.6rem !important;
-    }
-    
-    .keyword-small {
-        font-size: 1.4rem !important;
-    }
-    
     .service-title-vertical {
         font-size: 1.1rem !important;
     }
     
     .service-description-vertical {
         font-size: 0.9rem !important;
-    }
-    
-    .btn-text {
-        font-size: 0.9rem;
-        padding: 12px 0;
-    }
-    
-    .button-separator {
-        font-size: 1.5rem;
     }
     
     .explanation-title {

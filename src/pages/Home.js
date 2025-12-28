@@ -1,25 +1,26 @@
 // src/pages/Home.jsx
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import './Home.css';
+import OwnerSignature from '../components/OwnerSignature.jsx';
 
-// Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger);
+// Import image
+import bg1 from './assets/bg1.jpeg';
 
 const Home = () => {
-    const root = useRef();
-    const heroRef = useRef();
-    const heroTitleRef = useRef();
     const servicesRef = useRef([]);
     const [isAnimating, setIsAnimating] = useState(false);
     const [hoveredService, setHoveredService] = useState(null);
-    const [keywordPositions, setKeywordPositions] = useState([]);
-    const [hoveredKeywordIndex, setHoveredKeywordIndex] = useState(null);
     const navigate = useNavigate();
+
+    // Refs for animation
+    const titleRef = useRef(null);
+    const descriptionRef = useRef(null);
+    const buttonsRef = useRef(null);
+    const imageRef = useRef(null);
 
     // Main services data
     const mainServices = [
@@ -49,242 +50,46 @@ const Home = () => {
         }
     ];
 
-    // Hero title with keywords
-    const heroTitle = "Creative Interior Solutions for Residential and Commercial Spaces. Art & Décor with a Unique Souvenir Collection.";
-
-    // Keywords for highlighting
-    const keywords = ['Creative', 'Interior', 'Solutions', 'Residential', 'Commercial', 'Art', 'Décor', 'Unique', 'Souvenir'];
-    const largeKeywords = ['Creative', 'Interior', 'Solutions', 'Commercial', 'Unique', 'Souvenir'];
-
-    // Calculate keyword positions
-    const calculateKeywordPositions = useCallback(() => {
-        if (!heroTitleRef.current) return;
-        
-        const titleElement = heroTitleRef.current;
-        const words = heroTitle.split(' ');
-        let positions = [];
-        let currentPosition = 0;
-        
-        words.forEach((word, index) => {
-            const cleanWord = word.replace(/[.,]/g, '');
-            if (keywords.includes(cleanWord)) {
-                // Find the span element for this keyword
-                const keywordSpans = titleElement.querySelectorAll('.keyword');
-                const keywordIndex = Array.from(keywordSpans).findIndex(span => 
-                    span.textContent.replace(/\s+/g, ' ').trim() === word
-                );
-                
-                if (keywordIndex !== -1) {
-                    const span = keywordSpans[keywordIndex];
-                    const rect = span.getBoundingClientRect();
-                    const titleRect = titleElement.getBoundingClientRect();
-                    
-                    positions.push({
-                        left: rect.left - titleRect.left,
-                        top: rect.top - titleRect.top,
-                        width: rect.width,
-                        height: rect.height,
-                        index: positions.length,
-                        word: cleanWord
-                    });
-                }
-            }
-        });
-        
-        setKeywordPositions(positions);
-    }, [heroTitle, keywords]);
+    // Hero description as paragraph - 4 lines
+    const heroDescription = `We transform spaces with bespoke interior design solutions. Custom furniture, wall decor, and complete makeovers for residential and commercial projects. Sustainable materials and expert craftsmanship. Your vision, our creation.`;
 
     useEffect(() => {
-        calculateKeywordPositions();
-        
-        // Recalculate on resize
-        window.addEventListener('resize', calculateKeywordPositions);
-        
-        const ctx = gsap.context(() => {
-            // Title reveal animation
-            const titleSpans = document.querySelectorAll('.title-part');
-            gsap.from(titleSpans, {
-                y: 30,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.05,
-                ease: "power3.out",
-                delay: 0.3
-            });
+        // Slide up animation on page load
+        const elements = [
+            titleRef.current,
+            descriptionRef.current,
+            buttonsRef.current,
+            imageRef.current
+        ];
 
-            // Animate gray shapes for keywords
-            const grayShapes = document.querySelectorAll('.keyword-base-shape');
-            gsap.from(grayShapes, {
-                scaleX: 0,
-                duration: 0.8,
-                delay: 0.5,
-                stagger: 0.1,
-                ease: "power3.out"
-            });
+        // Set initial position (hidden below)
+        gsap.set(elements, {
+            y: 50,
+            opacity: 0
+        });
 
-            // Button hover effects setup
-            const buttons = document.querySelectorAll('.hero-btn');
-            buttons.forEach(btn => {
-                btn.addEventListener('mouseenter', () => {
-                    gsap.to(btn.querySelector('.btn-text'), {
-                        y: -3,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
-                });
-                
-                btn.addEventListener('mouseleave', () => {
-                    gsap.to(btn.querySelector('.btn-text'), {
-                        y: 0,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
-                });
-            });
-
-            // Services section reveal animation
-            gsap.from('.services-showcase', {
-                y: 50,
-                opacity: 0,
-                duration: 1.2,
-                delay: 0.5,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: '.services-showcase',
-                    start: "top 80%",
-                    end: "top 60%",
-                    scrub: 1,
-                    markers: false
-                }
-            });
-
-            // Featured section animation
-            gsap.from('.featured-card', {
-                y: 30,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: '.featured-section',
-                    start: "top 80%",
-                    end: "top 60%",
-                    scrub: 1,
-                    markers: false
-                }
-            });
-
-            // CTA section animation
-            gsap.from('.cta-title', {
-                y: 30,
-                opacity: 0,
-                duration: 1,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: '.cta-section',
-                    start: "top 80%",
-                    end: "top 60%",
-                    scrub: 1,
-                    markers: false
-                }
-            });
-
-        }, root);
-
-        return () => {
-            ctx.revert();
-            window.removeEventListener('resize', calculateKeywordPositions);
-        };
-    }, [calculateKeywordPositions]);
-
-    const handleKeywordHover = (index, isEntering) => {
-        const hoverShape = document.querySelector('.keyword-hover-shape');
-        
-        if (isEntering && keywordPositions[index]) {
-            setHoveredKeywordIndex(index);
-            
-            const position = keywordPositions[index];
-            if (hoverShape) {
-                gsap.to(hoverShape, {
-                    left: position.left,
-                    top: position.top,
-                    width: position.width,
-                    height: position.height,
-                    opacity: 0.25,
-                    scaleX: 0.95,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-            }
-        } else {
-            setHoveredKeywordIndex(null);
-            if (hoverShape) {
-                gsap.to(hoverShape, {
-                    opacity: 0,
-                    scaleX: 0,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-            }
-        }
-    };
+        // Animate each element with delay
+        gsap.to(elements, {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+            delay: 0.3
+        });
+    }, []);
 
     const handleButtonClick = (e, link, type) => {
         e.preventDefault();
         if (isAnimating) return;
         
         setIsAnimating(true);
-        const button = e.currentTarget;
-        
-        // Button press animation
-        gsap.to(button, {
-            scale: 0.95,
-            duration: 0.1,
-            ease: "power2.out",
-            onComplete: () => {
-                gsap.to(button, {
-                    scale: 1,
-                    duration: 0.3,
-                    ease: "elastic.out(1, 0.5)"
-                });
-            }
-        });
 
-        // Create particles
-        const color = type === 'quote' ? '#a80000' : '#1a1a1a';
-        for(let i = 0; i < 5; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'button-particle';
-            particle.style.cssText = `
-                position: fixed;
-                width: 4px;
-                height: 4px;
-                background: ${color};
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 1000;
-                left: ${e.clientX}px;
-                top: ${e.clientY}px;
-                opacity: 0.8;
-            `;
-            document.body.appendChild(particle);
-            
-            gsap.to(particle, {
-                x: gsap.utils.random(-20, 20),
-                y: gsap.utils.random(-20, 20),
-                opacity: 0,
-                scale: 0,
-                duration: 0.6,
-                ease: "power2.out",
-                onComplete: () => particle.remove()
-            });
-        }
-
-        // Navigate after animation
+        // Navigate after short delay
         setTimeout(() => {
             navigate(link);
             setIsAnimating(false);
-        }, 500);
+        }, 100);
     };
 
     const handleServiceHover = (service, index, isHovering) => {
@@ -306,7 +111,7 @@ const Home = () => {
                 const textWidth = textRect.width;
                 const textHeight = textRect.height;
                 
-                // Create oval highlight with animated entry
+                // Create oval highlight
                 const highlight = document.createElement('div');
                 highlight.className = 'text-highlight-oval';
                 highlight.style.cssText = `
@@ -321,46 +126,10 @@ const Home = () => {
                     border-radius: 100px;
                     pointer-events: none;
                     z-index: -1;
-                    opacity: 0;
+                    opacity: 1;
                     transform-origin: center;
                 `;
                 textWrapper.appendChild(highlight);
-                
-                // Animate oval in with rotation and scaling
-                gsap.fromTo(highlight, 
-                    {
-                        opacity: 0,
-                        scale: 0.8,
-                        rotate: -10
-                    },
-                    {
-                        opacity: 1,
-                        scale: 1,
-                        rotate: 0,
-                        duration: 0.4,
-                        ease: "back.out(1.2)",
-                        onComplete: () => {
-                            // Continuous subtle animation
-                            gsap.to(highlight, {
-                                rotate: 2,
-                                duration: 2,
-                                repeat: -1,
-                                yoyo: true,
-                                ease: "sine.inOut"
-                            });
-                            
-                            // Pulse animation for border
-                            gsap.to(highlight, {
-                                borderWidth: '2.5px',
-                                borderColor: service.color === '#a80000' ? 'rgba(168, 0, 0, 0.25)' : 'rgba(26, 26, 26, 0.15)',
-                                duration: 1.5,
-                                repeat: -1,
-                                yoyo: true,
-                                ease: "sine.inOut"
-                            });
-                        }
-                    }
-                );
             }
         } else {
             setHoveredService(null);
@@ -369,17 +138,10 @@ const Home = () => {
             if (serviceElement) {
                 const textWrapper = serviceElement.querySelector('.service-text-wrapper');
                 if (textWrapper) {
-                    // Animate oval out
+                    // Remove highlight
                     const highlight = textWrapper.querySelector('.text-highlight-oval');
                     if (highlight) {
-                        gsap.to(highlight, {
-                            opacity: 0,
-                            scale: 0.9,
-                            rotate: 5,
-                            duration: 0.3,
-                            ease: "power2.out",
-                            onComplete: () => highlight.remove()
-                        });
+                        highlight.remove();
                     }
                 }
             }
@@ -395,37 +157,8 @@ const Home = () => {
         }, 100);
     };
 
-    // Function to render title with keyword highlights
-    const renderTitle = () => {
-        const words = heroTitle.split(' ');
-        let keywordIndex = 0;
-        
-        return words.map((word, index) => {
-            const cleanWord = word.replace(/[.,]/g, '');
-            const isKeyword = keywords.includes(cleanWord);
-            const isLarge = largeKeywords.includes(cleanWord);
-            
-            if (isKeyword) {
-                const currentIndex = keywordIndex;
-                keywordIndex++;
-                
-                return (
-                    <span 
-                        key={index} 
-                        className={`keyword ${isLarge ? 'keyword-large' : 'keyword-small'}`}
-                        onMouseEnter={() => handleKeywordHover(currentIndex, true)}
-                        onMouseLeave={() => handleKeywordHover(currentIndex, false)}
-                    >
-                        {word}{' '}
-                    </span>
-                );
-            }
-            return <span key={index} className="title-part">{word} </span>;
-        });
-    };
-
     return (
-        <div ref={root} className="pablo-minimal">
+        <div className="pablo-minimal">
             {/* Simple background with minimal elements */}
             <div className="hero-background">
                 <div className="bg-shape shape-1"></div>
@@ -434,63 +167,73 @@ const Home = () => {
             </div>
 
             <Nav />
-            
-            {/* HERO SECTION - Only Title and Buttons */}
-            <section className="hero-section" ref={heroRef}>
-                <div className="container">
-                    <div className="hero-content">
-                        {/* Hero Title with Keyword Highlights */}
-                        <h1 className="hero-title" ref={heroTitleRef}>
-                            {renderTitle()}
-                            
-                            {/* Keyword shapes container */}
-                            <div className="keyword-shapes-container">
-                                {/* Gray shapes for all keywords */}
-                                {keywordPositions.map((pos, index) => (
-                                    <div 
-                                        key={`gray-${index}`}
-                                        className="keyword-base-shape"
-                                        style={{
-                                            left: `${pos.left}px`,
-                                            top: `${pos.top}px`,
-                                            width: `${pos.width}px`,
-                                            height: `${pos.height}px`
-                                        }}
-                                    />
-                                ))}
-                                
-                                {/* Single red hover shape */}
-                                <div className="keyword-hover-shape" />
-                            </div>
-                        </h1>
-                        
-                        {/* Call-to-action Buttons */}
-                        <div className="hero-actions">
-                            <div className="button-group">
-                                <Link 
-                                    to="/services" 
-                                    className="hero-btn view-services-btn"
-                                    onClick={(e) => handleButtonClick(e, '/services', 'services')}
-                                >
-                                    <span className="btn-text">View Services</span>
-                                    <div className="btn-line"></div>
-                                </Link>
-                                
-                                <div className="button-separator">|</div>
-                                
-                                <Link 
-                                    to="/quote" 
-                                    className="hero-btn get-quote-btn"
-                                    onClick={(e) => handleButtonClick(e, '/quote', 'quote')}
-                                >
-                                    <span className="btn-text">Get a Quote</span>
-                                    <div className="btn-line red-line"></div>
-                                </Link>
-                            </div>
-                        </div>
+            <OwnerSignature />
+
+  {/* UPDATED HERO SECTION - CORRECT LAYOUT */}
+<section className="hero-section">
+    <div className="container">
+        <div className="hero-content">
+            {/* Title and Description Row */}
+            <div className="hero-title-row">
+                {/* Left: PABLO studio and Get Quote button */}
+                <div className="hero-pablo-container">
+                    <h1 className="hero-title" ref={titleRef}>
+                        <span className="hero-pablo">
+                            <span className="pablo-letter">P</span>
+                            <span className="pablo-letter">A</span>
+                            <span className="pablo-letter">B</span>
+                            <span className="pablo-letter">L</span>
+                            <span className="pablo-letter">O</span>
+                        </span>
+                        <span className="hero-studio">studio</span>
+                    </h1>
+                    
+                    {/* Get Quote Button - Below PABLO, aligned with P */}
+                    <div className="get-quote-left">
+                        <Link 
+                            to="/quote" 
+                            className="hero-btn get-quote-btn"
+                            onClick={(e) => handleButtonClick(e, '/quote', 'quote')}
+                        >
+                            <span className="btn-text">Get a Quote</span>
+                            <div className="btn-line red-line"></div>
+                        </Link>
                     </div>
                 </div>
-            </section>
+                
+                {/* Right: Description and View Services button */}
+                <div className="hero-description-container">
+                    <p className="hero-description" ref={descriptionRef}>
+                        {heroDescription}
+                    </p>
+                    
+                    {/* View Services Button - Below description, right aligned */}
+                    <div className="view-services-right">
+                        <Link 
+                            to="/services" 
+                            className="hero-btn view-services-btn"
+                            onClick={(e) => handleButtonClick(e, '/services', 'services')}
+                        >
+                            <span className="btn-text">View Services</span>
+                            <div className="btn-line"></div>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            
+            {/* Image Section - Below everything */}
+            <div className="hero-image-section">
+                <div className="hero-image-container" ref={imageRef}>
+                    <img 
+                        src={bg1} 
+                        alt="Pablo Studio Interior Design" 
+                        className="hero-image"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
             {/* SERVICES SHOWCASE SECTION - SEPARATE SECTION */}
             <section className="services-showcase">
@@ -702,7 +445,6 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-            
             <Footer />
         </div>
     );
