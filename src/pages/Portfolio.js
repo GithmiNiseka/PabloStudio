@@ -27,19 +27,22 @@ const Portfolio = () => {
             id: 'thotilla',
             name: 'Thotilla', 
             description: 'Transportation Services',
-            count: projects.filter(p => p.business === 'thotilla').length
+            count: projects.filter(p => p.business === 'thotilla').length,
+            color: '#dc2626'
         },
         { 
             id: 'suvinor',
             name: 'Suvinor', 
             description: 'Vehicle Solutions',
-            count: projects.filter(p => p.business === 'suvinor').length
+            count: projects.filter(p => p.business === 'suvinor').length,
+            color: '#dc2626'
         },
         { 
             id: 'epablo',
             name: 'Pablo', 
             description: 'Creative Studio',
-            count: projects.filter(p => p.business === 'epablo').length
+            count: projects.filter(p => p.business === 'epablo').length,
+            color: '#dc2626'
         }
     ];
 
@@ -52,8 +55,8 @@ const Portfolio = () => {
     const getActiveBusinessData = () => {
         if (activeBusiness === null) {
             return {
-                name: 'Portfolio',
-                description: 'All Projects',
+                name: '',
+                description: '',
                 count: projects.length
             };
         }
@@ -62,25 +65,112 @@ const Portfolio = () => {
 
     const activeBusinessData = getActiveBusinessData();
 
-    // IMPROVED Bento layout patterns - better distribution, less empty space
+    // Get business color
+    const getBusinessColor = (businessId) => {
+        const business = businesses.find(b => b.id === businessId);
+        return business ? business.color : '#dc2626';
+    };
+
+    // Function to get correct image path based on business
+    const getImagePath = (project) => {
+        if (!project.image) return '/placeholder-image.jpg';
+        
+        // If image already has a full path or URL, return as is
+        if (project.image.startsWith('http') || project.image.startsWith('/')) {
+            return project.image;
+        }
+        
+        // Get business folder name
+        let businessFolder = '';
+        switch(project.business) {
+            case 'thotilla':
+                businessFolder = 'thot';
+                break;
+            case 'suvinor':
+                businessFolder = 'souv';
+                break;
+            case 'epablo':
+                businessFolder = 'pablo';
+                break;
+            default:
+                businessFolder = project.business;
+        }
+        
+        // Construct path to asset folder
+        return `/assets/${businessFolder}/${project.image}`;
+    };
+
+    // Function to get gallery images with correct paths
+    const getGalleryImages = (project) => {
+        const images = [];
+        
+        // Add main image first
+        images.push(getImagePath(project));
+        
+        // Add additional images if they exist
+        if (project.additionalImages && project.additionalImages.length > 0) {
+            project.additionalImages.forEach(img => {
+                if (img.startsWith('http') || img.startsWith('/')) {
+                    images.push(img);
+                } else {
+                    let businessFolder = '';
+                    switch(project.business) {
+                        case 'thotilla':
+                            businessFolder = 'thot';
+                            break;
+                        case 'suvinor':
+                            businessFolder = 'souv';
+                            break;
+                        case 'epablo':
+                            businessFolder = 'pablo';
+                            break;
+                        default:
+                            businessFolder = project.business;
+                    }
+                    images.push(`/assets/${businessFolder}/${img}`);
+                }
+            });
+        }
+        
+        // Add gallery images if they exist
+        if (project.gallery && project.gallery.length > 0) {
+            project.gallery.forEach(img => {
+                if (img.startsWith('http') || img.startsWith('/')) {
+                    images.push(img);
+                } else {
+                    let businessFolder = '';
+                    switch(project.business) {
+                        case 'thotilla':
+                            businessFolder = 'thot';
+                            break;
+                        case 'suvinor':
+                            businessFolder = 'souv';
+                            break;
+                        case 'epablo':
+                            businessFolder = 'pablo';
+                            break;
+                        default:
+                            businessFolder = project.business;
+                    }
+                    images.push(`/assets/${businessFolder}/${img}`);
+                }
+            });
+        }
+        
+        return images;
+    };
+
+    // IMPROVED Bento layout patterns
     const getBentoLayout = (index, totalItems) => {
-        // More balanced patterns for better space usage
         const patterns = [
-            // Row 1 patterns
             'normal', 'normal', 'tall',
-            // Row 2 patterns  
             'wide', 'normal',
-            // Row 3 patterns
             'normal', 'large',
-            // Row 4 patterns
             'normal', 'wide',
-            // Row 5 patterns
             'tall', 'normal', 'normal'
         ];
         
-        // Adjust based on total items
         if (totalItems <= 4) {
-            // For few items, use simpler layout
             return 'normal';
         }
         
@@ -95,36 +185,23 @@ const Portfolio = () => {
 
     // Get all project images including gallery
     const getAllProjectImages = (project) => {
-        const images = [project.image];
-        
-        if (project.additionalImages && project.additionalImages.length > 0) {
-            images.push(...project.additionalImages);
-        }
-        
-        if (project.gallery && project.gallery.length > 0) {
-            images.push(...project.gallery);
-        }
-        
-        return images;
+        return getGalleryImages(project);
     };
 
     // Handle business change
     const handleBusinessChange = (businessId) => {
-        // If clicking the already active business, reset to show all
         if (activeBusiness === businessId) {
             setActiveBusiness(null);
         } else {
             setActiveBusiness(businessId);
         }
         
-        // Fade out animation
         gsap.to('.bento-project-item', {
             opacity: 0,
             y: 30,
             duration: 0.3,
             stagger: 0.05,
             onComplete: () => {
-                // Fade in animation
                 gsap.fromTo('.bento-project-item',
                     { opacity: 0, y: 30 },
                     {
@@ -156,9 +233,8 @@ const Portfolio = () => {
 
         setSelectedProject(project);
         const allImages = getAllProjectImages(project);
-        setGalleryImages(allImages.slice(1)); // Exclude first/main image
+        setGalleryImages(allImages.slice(1));
         
-        // First show the overlay
         setIsPopupOpen(true);
         document.body.style.overflow = 'hidden';
         
@@ -359,8 +435,11 @@ const Portfolio = () => {
                         onMouseEnter={() => setHoveredBusiness(business.id)}
                         onMouseLeave={() => setHoveredBusiness(null)}
                         style={{
-                            backgroundColor: (activeBusiness === business.id || hoveredBusiness === business.id) ? '#000' : 'transparent',
-                            color: (activeBusiness === business.id || hoveredBusiness === business.id) ? '#fff' : '#000'
+                            backgroundColor: (activeBusiness === business.id) ? business.color : 'transparent',
+                            color: (activeBusiness === business.id) ? '#000000' : '#ffffff',
+                            borderColor: (activeBusiness === business.id || hoveredBusiness === business.id) ? business.color : '#ffffff',
+                            borderWidth: '1px',
+                            borderStyle: 'solid'
                         }}
                     >
                         <span className="business-name">
@@ -376,13 +455,10 @@ const Portfolio = () => {
                 <section className="portfolio-hero vertical-hero">
                     <div className="content-wrapper">
                         <h1 className="vertical-page-title">
-                            {activeBusiness === null ? 'Portfolio' : activeBusinessData.name}
+                            {activeBusinessData.name}
                         </h1>
                         <p className="vertical-page-description">
                             {activeBusinessData.description}
-                        </p>
-                        <p className="vertical-page-count">
-                            {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
                         </p>
                     </div>
                 </section>
@@ -404,7 +480,7 @@ const Portfolio = () => {
                                     {/* Project Image */}
                                     <div className="project-image-container-bento">
                                         <img 
-                                            src={project.image || '/placeholder-image.jpg'} 
+                                            src={getImagePath(project)} 
                                             alt={project.title}
                                             className="project-image-bento"
                                             onError={(e) => {
@@ -431,7 +507,7 @@ const Portfolio = () => {
                                         </p>
 
                                         <div className="project-footer-bento">
-                                            <span className="project-category-bento">
+                                            <span className="project-category-bento" style={{ color: getBusinessColor(project.business) }}>
                                                 {project.category || 'Project'}
                                             </span>
                                             <button 
@@ -440,6 +516,7 @@ const Portfolio = () => {
                                                     e.stopPropagation();
                                                     handleProjectClick(project.id);
                                                 }}
+                                                style={{ color: getBusinessColor(project.business) }}
                                             >
                                                 View
                                                 <svg className="arrow-bento" width="16" height="16" viewBox="0 0 16 16">
@@ -504,11 +581,20 @@ const Portfolio = () => {
                             <div className="project-details-info">
                                 {/* Header */}
                                 <div className="project-details-header">
+                                    <div className="project-breadcrumb">
+                                        <span className="project-breadcrumb-item" style={{ color: getBusinessColor(selectedProject.business) }}>
+                                            {businesses.find(b => b.id === selectedProject.business)?.name}
+                                        </span>
+                                        <span className="project-breadcrumb-separator">/</span>
+                                        <span className="project-breadcrumb-item active">
+                                            {selectedProject.title}
+                                        </span>
+                                    </div>
                                     <h1 className="project-details-title">
                                         {selectedProject.title}
                                     </h1>
                                     <div className="project-details-meta">
-                                        <span className="project-details-category">
+                                        <span className="project-details-category" style={{ color: getBusinessColor(selectedProject.business) }}>
                                             {selectedProject.category || 'Project'}
                                         </span>
                                         <span className="project-details-year">
@@ -570,7 +656,7 @@ const Portfolio = () => {
                                                 <div 
                                                     key={index} 
                                                     className="gallery-item"
-                                                    onClick={() => openLightbox(index + 1)} // +1 to skip main image
+                                                    onClick={() => openLightbox(index + 1)}
                                                 >
                                                     <img 
                                                         src={img} 
@@ -614,6 +700,7 @@ const Portfolio = () => {
                                         className="primary-btn"
                                         onClick={() => selectedProject.liveUrl && handleExternalLink(selectedProject.liveUrl)}
                                         disabled={!selectedProject.liveUrl}
+                                        style={{ backgroundColor: getBusinessColor(selectedProject.business), borderColor: getBusinessColor(selectedProject.business) }}
                                     >
                                         {selectedProject.liveUrl ? 'Visit Live Site' : 'Coming Soon'}
                                     </button>
@@ -621,6 +708,7 @@ const Portfolio = () => {
                                         className="secondary-btn"
                                         onClick={() => selectedProject.githubUrl && handleExternalLink(selectedProject.githubUrl)}
                                         disabled={!selectedProject.githubUrl}
+                                        style={{ borderColor: getBusinessColor(selectedProject.business), color: getBusinessColor(selectedProject.business) }}
                                     >
                                         View Code
                                     </button>

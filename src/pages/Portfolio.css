@@ -1,9 +1,38 @@
 /* src/pages/Portfolio.css */
 .vertical-portfolio {
-    background: #ffffff;
-    color: #000000;
+    background: #000000;
+    color: #ffffff;
     min-height: 100vh;
     position: relative;
+}
+
+/* Project breadcrumb in popup */
+.project-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.project-breadcrumb-item {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.project-breadcrumb-item:hover {
+    color: #fff;
+}
+
+.project-breadcrumb-item.active {
+    font-weight: 500;
+    color: #fff;
+}
+
+.project-breadcrumb-separator {
+    opacity: 0.5;
+    color: #666;
 }
 
 /* FIXED: Ensure grid is visible */
@@ -17,12 +46,12 @@
     visibility: visible !important;
 }
 
-/* UPDATED: Project items - BOTTOM BORDER by default, darker on hover */
+/* UPDATED: Project items - DARK THEME */
 .bento-project-item {
     cursor: pointer;
     transition: all 0.3s ease;
-    border-bottom: 1px solid #e0e0e0; /* LIGHT BOTTOM BORDER BY DEFAULT */
-    background: #fff;
+    border-bottom: 1px solid #333;
+    background: #111;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -31,36 +60,38 @@
     position: relative;
     opacity: 1 !important;
     transform: translateY(0) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Hover effect - DARKEN BOTTOM BORDER */
+/* Hover effect - RED BORDER */
 .bento-project-item:hover {
     transform: translateY(-5px);
-    border-bottom: 3px solid #000; /* DARKER BORDER ON HOVER */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-bottom: 3px solid #dc2626;
+    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.2);
+    background: #1a1a1a;
 }
 
 /* Simple Vertical Business Boxes */
 .business-boxes-sidebar {
     position: fixed;
-    left: 0;
+    left: -5px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 100;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding-left: 10px;
+    padding-left: 0;
     transition: all 0.3s ease;
 }
 
+/* Business boxes - WHITE BORDER by default */
 .business-box {
     width: 30px;
     height: 80px;
-    border: 1px solid #000;
+    border: 1px solid #ffffff;
     background: transparent;
-    color: #000;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -68,19 +99,25 @@
     transition: all 0.3s ease;
     writing-mode: vertical-rl;
     text-orientation: mixed;
-    border-radius: 0 0px 0px 0;
+    border-radius: 0 4px 4px 0;
     position: relative;
     overflow: hidden;
+    font-weight: 500;
 }
 
+/* Hover effect - RED BORDER on hover */
 .business-box:hover {
-    background: #000;
-    color: #fff;
+    background: rgba(220, 38, 38, 0.1);
+    color: #ffffff;
+    border-color: #dc2626;
 }
 
+/* Active state - SOLID RED with BLACK TEXT */
 .business-box.active {
-    background: #000;
-    color: #fff;
+    background: #dc2626;
+    color: #000000;
+    border-color: #dc2626;
+    font-weight: 600;
 }
 
 .business-box:hover:before {
@@ -90,7 +127,7 @@
     left: 50%;
     width: 0;
     height: 0;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(220, 38, 38, 0.2);
     border-radius: 50%;
     transform: translate(-50%, -50%);
     animation: ripple 0.6s ease-out;
@@ -106,7 +143,7 @@
 
 .business-name {
     font-size: 0.7rem;
-    font-weight: 700;
+    font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     transform: rotate(180deg);
@@ -121,36 +158,29 @@
     transition: all 0.3s ease;
 }
 
-/* Hero - UPDATED: Larger Portfolio title */
+/* Hero */
 .vertical-hero {
-    padding: 80px 0 40px;
+    padding: 40px 0 40px;
 }
 
 .vertical-page-title {
-    font-size: 4rem; /* INCREASED FROM 3rem TO 4rem */
+    font-size: 4rem;
     font-weight: 500;
     letter-spacing: -0.02em;
     margin-bottom: 10px;
-    margin-top: 50px !important;
+    margin-top: 0 !important;
     line-height: 1;
     transition: all 0.3s ease;
+    min-height: 80px;
+    color: #ffffff;
 }
 
 .vertical-page-description {
     font-size: 1rem;
-    color: #666;
+    color: #999;
     max-width: 400px;
     line-height: 1.4;
     transition: all 0.3s ease;
-}
-
-/* Project count in hero */
-.vertical-page-count {
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 8px;
-    opacity: 0.7;
-    font-weight: 400;
 }
 
 /* Different sizes for bento layout */
@@ -212,7 +242,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.1));
+    background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.5));
     pointer-events: none;
 }
 
@@ -245,7 +275,7 @@
     font-weight: 400;
     line-height: 1.2;
     margin-bottom: 12px;
-    color: #000;
+    color: #ffffff;
 }
 
 .bento-project-item.large .project-title-bento,
@@ -256,7 +286,7 @@
 /* Short description */
 .project-description-bento {
     font-size: 0.9rem;
-    color: #666;
+    color: #aaa;
     line-height: 1.4;
     margin-bottom: 20px;
     display: -webkit-box;
@@ -277,21 +307,22 @@
     align-items: center;
     margin-top: auto;
     padding-top: 20px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #333;
 }
 
 .project-category-bento {
     font-size: 0.75rem;
-    color: #666;
+    color: #dc2626;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 500;
 }
 
 /* View button for bento */
 .view-button-bento {
     background: transparent;
     border: none;
-    color: #000;
+    color: #dc2626;
     font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
@@ -324,7 +355,7 @@
 .empty-icon-vertical {
     font-size: 3rem;
     margin-bottom: 20px;
-    color: #e0e0e0;
+    color: #444;
 }
 
 .empty-state-vertical p {
@@ -339,7 +370,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(3px);
     z-index: 1000;
     display: flex;
@@ -357,8 +388,8 @@
 }
 
 .project-details-container {
-    background: rgba(255, 255, 255, 0.98);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     width: 100%;
     max-width: 100%;
     height: 90vh;
@@ -370,7 +401,8 @@
     border-bottom: none;
     border-radius: 20px 20px 0 0;
     backdrop-filter: blur(20px);
-    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
 }
 
 .project-details-overlay.active .project-details-container {
@@ -381,7 +413,7 @@
 .popup-handle {
     width: 40px;
     height: 4px;
-    background: #e0e0e0;
+    background: #444;
     border-radius: 2px;
     margin: 20px auto;
     cursor: grab;
@@ -396,8 +428,8 @@
     position: fixed;
     top: 20px;
     right: 20px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     font-size: 2rem;
     cursor: pointer;
     z-index: 1001;
@@ -407,18 +439,18 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    color: #000;
+    color: #fff;
     border-radius: 50%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     font-weight: 300;
 }
 
 .close-project-btn:hover {
     transform: rotate(90deg);
-    background: #000;
+    background: #dc2626;
     color: #fff;
-    border-color: #000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-color: #dc2626;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
 }
 
 /* Project Details Content */
@@ -440,7 +472,7 @@
     width: 100%;
     height: 400px;
     object-fit: cover;
-    border: 1px solid #f0f0f0;
+    border: 1px solid #333;
     border-radius: 8px;
 }
 
@@ -455,14 +487,14 @@
     height: 80px;
     object-fit: cover;
     cursor: pointer;
-    border: 1px solid #f0f0f0;
+    border: 1px solid #333;
     border-radius: 4px;
     transition: all 0.3s ease;
 }
 
 .thumbnail:hover,
 .thumbnail.active {
-    border-color: #000;
+    border-color: #dc2626;
     transform: scale(1.05);
 }
 
@@ -475,7 +507,7 @@
 .project-details-header {
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #333;
 }
 
 .project-details-title {
@@ -483,6 +515,7 @@
     font-weight: 300;
     margin-bottom: 10px;
     line-height: 1.2;
+    color: #fff;
 }
 
 .project-details-meta {
@@ -490,12 +523,13 @@
     justify-content: space-between;
     align-items: center;
     font-size: 0.9rem;
-    color: #666;
+    color: #aaa;
 }
 
 .project-details-category {
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 500;
 }
 
 .project-details-year {
@@ -505,7 +539,7 @@
 .project-details-description {
     font-size: 1rem;
     line-height: 1.6;
-    color: #333;
+    color: #ccc;
     margin-bottom: 30px;
 }
 
@@ -524,6 +558,7 @@
     margin-bottom: 15px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    color: #fff;
 }
 
 .features-list {
@@ -536,7 +571,7 @@
 
 .features-list li {
     font-size: 0.9rem;
-    color: #666;
+    color: #aaa;
     padding-left: 15px;
     position: relative;
 }
@@ -545,14 +580,14 @@
     content: '—';
     position: absolute;
     left: 0;
-    color: #000;
+    color: #dc2626;
 }
 
 /* Tech Stack Section */
 .tech-stack-section {
     margin-top: 30px;
     padding-top: 30px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #333;
 }
 
 .tech-stack-section h3 {
@@ -561,6 +596,7 @@
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    color: #fff;
 }
 
 .tech-stack-grid {
@@ -571,25 +607,25 @@
 
 .tech-item {
     padding: 8px 15px;
-    background: #f5f5f5;
-    border: 1px solid #e0e0e0;
+    background: #222;
+    border: 1px solid #444;
     border-radius: 20px;
     font-size: 0.85rem;
-    color: #666;
+    color: #ccc;
     transition: all 0.3s ease;
 }
 
 .tech-item:hover {
-    background: #000;
+    background: #dc2626;
     color: #fff;
-    border-color: #000;
+    border-color: #dc2626;
 }
 
 /* Project Timeline */
 .project-timeline {
     margin-top: 30px;
     padding-top: 30px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #333;
 }
 
 .project-timeline h3 {
@@ -598,6 +634,7 @@
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    color: #fff;
 }
 
 .timeline-item {
@@ -614,27 +651,27 @@
     top: 5px;
     width: 12px;
     height: 12px;
-    background: #000;
+    background: #dc2626;
     border-radius: 50%;
 }
 
 .timeline-date {
     font-weight: 500;
     min-width: 100px;
-    color: #000;
+    color: #fff;
     margin-right: 20px;
 }
 
 .timeline-content {
     flex: 1;
-    color: #666;
+    color: #aaa;
 }
 
 /* Project Gallery Section */
 .project-gallery-section {
     margin-top: 40px;
     padding-top: 30px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #333;
 }
 
 .project-gallery-section h3 {
@@ -643,6 +680,7 @@
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    color: #fff;
 }
 
 .gallery-grid {
@@ -657,7 +695,7 @@
     overflow: hidden;
     cursor: pointer;
     aspect-ratio: 4/3;
-    border: 1px solid #f0f0f0;
+    border: 1px solid #333;
     border-radius: 8px;
 }
 
@@ -678,7 +716,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(220, 38, 38, 0.5);
     opacity: 0;
     transition: opacity 0.3s ease;
     display: flex;
@@ -707,7 +745,7 @@
     gap: 30px;
     margin-bottom: 30px;
     padding-top: 20px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #333;
 }
 
 .stat-item {
@@ -718,12 +756,12 @@
     font-size: 1.5rem;
     font-weight: 300;
     margin-bottom: 5px;
-    color: #000;
+    color: #fff;
 }
 
 .stat-label {
     font-size: 0.75rem;
-    color: #666;
+    color: #aaa;
     text-transform: uppercase;
     letter-spacing: 0.1em;
 }
@@ -734,7 +772,7 @@
     gap: 15px;
     margin-top: auto;
     padding-top: 30px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #333;
 }
 
 .primary-btn, .secondary-btn {
@@ -743,29 +781,30 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid #000;
+    border: 1px solid #dc2626;
 }
 
 .primary-btn {
-    background: #000;
+    background: #dc2626;
     color: #fff;
     flex: 2;
     border-radius: 4px;
 }
 
 .primary-btn:hover {
-    background: #333;
+    background: #b91c1c;
+    border-color: #b91c1c;
 }
 
 .secondary-btn {
     background: transparent;
-    color: #000;
+    color: #dc2626;
     flex: 1;
     border-radius: 4px;
 }
 
 .secondary-btn:hover {
-    background: #000;
+    background: #dc2626;
     color: #fff;
 }
 
@@ -776,7 +815,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0, 0, 0, 0.98);
     z-index: 2000;
     display: flex;
     align-items: center;
@@ -857,7 +896,7 @@
     transform: scale(1.1);
 }
 
-/* UPDATED: Background dimming effect when popup is open - INCLUDES NAV BAR */
+/* Background dimming effect when popup is open */
 body.popup-open .nav,
 body.popup-open .business-boxes-sidebar,
 body.popup-open .vertical-content,
@@ -892,7 +931,7 @@ body.lightbox-open .project-details-container {
     }
     
     .vertical-page-title {
-        font-size: 3.5rem; /* Adjusted for tablet */
+        font-size: 3.5rem;
     }
     
     .bento-project-item.large {
@@ -932,14 +971,16 @@ body.lightbox-open .project-details-container {
         padding: 15px 0;
         margin-bottom: 20px;
         width: 100%;
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: 1px solid #333;
         gap: 15px;
+        left: 0;
     }
     
     .business-box {
         width: 80px;
         height: 40px;
         writing-mode: horizontal-tb;
+        border-radius: 4px;
     }
     
     .business-name {
@@ -953,7 +994,8 @@ body.lightbox-open .project-details-container {
     }
     
     .vertical-page-title {
-        font-size: 3rem; /* Adjusted for mobile */
+        font-size: 3rem;
+        min-height: 60px;
     }
     
     .bento-projects-grid {
@@ -1023,7 +1065,8 @@ body.lightbox-open .project-details-container {
 
 @media (max-width: 480px) {
     .vertical-page-title {
-        font-size: 2.5rem; /* Adjusted for small mobile */
+        font-size: 2.5rem;
+        min-height: 50px;
     }
     
     .project-title-bento {
