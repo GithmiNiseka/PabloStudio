@@ -1,17 +1,22 @@
 {
   "files": {
-    "main.css": "/PabloStudio/static/css/main.63728a21.css",
-    "main.js": "/PabloStudio/static/js/main.24d534c4.js",
+    "main.css": "/PabloStudio/static/css/main.52c6ea03.css",
+    "main.js": "/PabloStudio/static/js/main.198ffb37.js",
     "static/js/453.0dcde838.chunk.js": "/PabloStudio/static/js/453.0dcde838.chunk.js",
-    "static/media/bg1.jpeg": "/PabloStudio/static/media/bg1.ba99ba4ad70e45d2bed2.jpeg",
-    "static/media/logo.jpeg": "/PabloStudio/static/media/logo.b13d62b8c18d345bbe97.jpeg",
+    "static/media/wel4.jpeg": "/PabloStudio/static/media/wel4.081eeaa5cf3d36349c26.jpeg",
+    "static/media/wel5.jpeg": "/PabloStudio/static/media/wel5.3f9346d5021001d3e1f6.jpeg",
+    "static/media/logo.jpeg": "/PabloStudio/static/media/logo.d2ba3d559b04d7ef4014.jpeg",
+    "static/media/wel3.jpeg": "/PabloStudio/static/media/wel3.597fcbb92290481197e5.jpeg",
+    "static/media/wel7.jpeg": "/PabloStudio/static/media/wel7.f6a153edf3ad8fdef790.jpeg",
+    "static/media/wel6.jpeg": "/PabloStudio/static/media/wel6.e1499688efe8fbd8a276.jpeg",
+    "static/media/wel13.jpeg": "/PabloStudio/static/media/wel13.38bf01c6c1f5681b42b8.jpeg",
     "index.html": "/PabloStudio/index.html",
-    "main.63728a21.css.map": "/PabloStudio/static/css/main.63728a21.css.map",
-    "main.24d534c4.js.map": "/PabloStudio/static/js/main.24d534c4.js.map",
+    "main.52c6ea03.css.map": "/PabloStudio/static/css/main.52c6ea03.css.map",
+    "main.198ffb37.js.map": "/PabloStudio/static/js/main.198ffb37.js.map",
     "453.0dcde838.chunk.js.map": "/PabloStudio/static/js/453.0dcde838.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.63728a21.css",
-    "static/js/main.24d534c4.js"
+    "static/css/main.52c6ea03.css",
+    "static/js/main.198ffb37.js"
   ]
 }
