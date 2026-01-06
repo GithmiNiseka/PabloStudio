@@ -1,24 +1,28 @@
-// src/pages/Shop.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import './Shop.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
     const [expandedProduct, setExpandedProduct] = useState(null);
     const [activeFilter, setActiveFilter] = useState('all');
-    const [searchQuery, setSearchQuery] = useState('');
     const [showCartSummary, setShowCartSummary] = useState(false);
     const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
     const [isExpanding, setIsExpanding] = useState(false);
     const containerRef = useRef();
     const expandedCardRef = useRef();
     const overlayRef = useRef();
+    const titleRef = useRef();
+    const descriptionRef = useRef();
+    const filterRef = useRef();
 
-    // Sample product data with multiple images for different colors
+    // Sample product data with shop1.jpeg for all products
     const productData = [
         {
             id: 1,
@@ -28,10 +32,10 @@ const Shop = () => {
             price: 2990,
             originalPrice: 3990,
             images: {
-                'Black & White': 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                'Ocean Blue': 'https://images.unsplash.com/photo-1579546929662-711aa81148cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                'Forest Green': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                'Sunset Orange': 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                'Black & White': '/assets/shop1.jpeg',
+                'Ocean Blue': '/assets/shop1.jpeg',
+                'Forest Green': '/assets/shop1.jpeg',
+                'Sunset Orange': '/assets/shop1.jpeg'
             },
             colors: [
                 { name: 'Black & White', value: '#000000' },
@@ -50,14 +54,13 @@ const Shop = () => {
             price: 12990,
             originalPrice: 15990,
             images: {
-                'Monochrome': 'https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                'Color Version': 'https://images.unsplash.com/photo-1621461133947-f63381c2f7f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                'Monochrome': '/assets/shop1.jpeg',
+                'Color Version': '/assets/shop1.jpeg'
             },
             colors: [
                 { name: 'Monochrome', value: '#333333' },
                 { name: 'Color Version', value: '#FF6B6B' }
-            ],
-            badge: 'Popular'
+            ]
         },
         {
             id: 3,
@@ -67,17 +70,16 @@ const Shop = () => {
             price: 4990,
             originalPrice: 5990,
             images: {
-                'Matte Black': 'https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                'White Pearl': 'https://images.unsplash.com/photo-1580913428706-c311e67898b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                'Navy Blue': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                'Matte Black': '/assets/shop1.jpeg',
+                'White Pearl': '/assets/shop1.jpeg',
+                'Navy Blue': '/assets/shop1.jpeg'
             },
             colors: [
                 { name: 'Matte Black', value: '#1a1a1a' },
                 { name: 'White Pearl', value: '#f8f8f8' },
                 { name: 'Navy Blue', value: '#0a2342' }
             ],
-            sizes: ['Standard', 'Square', 'Rounded'],
-            badge: 'New'
+            sizes: ['Standard', 'Square', 'Rounded']
         },
         {
             id: 4,
@@ -87,12 +89,11 @@ const Shop = () => {
             price: 8990,
             originalPrice: 11990,
             images: {
-                'Brand Colors': 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                'Brand Colors': '/assets/shop1.jpeg'
             },
             colors: [
                 { name: 'Brand Colors', value: '#4ECDC4' }
-            ],
-            badge: 'Limited'
+            ]
         },
         {
             id: 5,
@@ -102,12 +103,11 @@ const Shop = () => {
             price: 17990,
             originalPrice: 21990,
             images: {
-                'Custom Colors': 'https://images.unsplash.com/photo-1563089145-599997674d42?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                'Custom Colors': '/assets/shop1.jpeg'
             },
             colors: [
                 { name: 'Custom Colors', value: '#FFD166' }
-            ],
-            badge: 'Premium'
+            ]
         },
         {
             id: 6,
@@ -117,14 +117,42 @@ const Shop = () => {
             price: 24990,
             originalPrice: 29990,
             images: {
-                'Light Theme': 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                'Dark Theme': 'https://images.unsplash.com/photo-1551650992-ee4fd47df41f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                'Light Theme': '/assets/shop1.jpeg',
+                'Dark Theme': '/assets/shop1.jpeg'
             },
             colors: [
                 { name: 'Light Theme', value: '#ffffff' },
                 { name: 'Dark Theme', value: '#1a1a1a' }
-            ],
-            badge: 'Featured'
+            ]
+        },
+        {
+            id: 7,
+            name: 'Brand Identity Guide',
+            category: 'Branding',
+            description: 'Comprehensive brand identity guide with color palettes and typography.',
+            price: 14990,
+            originalPrice: 18990,
+            images: {
+                'Brand Colors': '/assets/shop1.jpeg'
+            },
+            colors: [
+                { name: 'Custom Colors', value: '#FF6B6B' }
+            ]
+        },
+        {
+            id: 8,
+            name: 'Mobile App UI Kit',
+            category: 'UI/UX',
+            description: 'Complete mobile app UI kit with components and screens.',
+            price: 18990,
+            originalPrice: 22990,
+            images: {
+                'Modern Design': '/assets/shop1.jpeg'
+            },
+            colors: [
+                { name: 'Dark Theme', value: '#1a1a1a' },
+                { name: 'Light Theme', value: '#ffffff' }
+            ]
         }
     ];
 
@@ -132,9 +160,10 @@ const Shop = () => {
         { id: 'all', label: 'All Products' },
         { id: 'Digital Art', label: 'Digital Art' },
         { id: 'Branding', label: 'Branding' },
-        { id: 'Print Design', label: 'Print' },
+        { id: 'Print Design', label: 'Print Design' },
         { id: '3D Design', label: '3D Design' },
-        { id: 'Web Design', label: 'Web Design' }
+        { id: 'Web Design', label: 'Web Design' },
+        { id: 'UI/UX', label: 'UI/UX' }
     ];
 
     // Initialize products with default selections
@@ -147,15 +176,60 @@ const Shop = () => {
         }));
         setProducts(initializedProducts);
         
-        // Initialize animations
-        gsap.from('.product-card', {
-            y: 50,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.1,
-            delay: 0.3,
-            ease: 'power2.out'
-        });
+        // Initialize animations - FIXED: Added immediate opacity for visibility
+        const ctx = gsap.context(() => {
+            // Immediately show title and subtitle to fix visibility issue
+            gsap.set([titleRef.current, descriptionRef.current, filterRef.current], {
+                opacity: 1,
+                y: 0
+            });
+
+            // Title animation
+            gsap.fromTo(titleRef.current,
+                { y: 30 },
+                {
+                    y: 0,
+                    duration: 1,
+                    delay: 0.3,
+                    ease: 'power2.out'
+                }
+            );
+
+            // Description animation
+            gsap.fromTo(descriptionRef.current,
+                { y: 20 },
+                {
+                    y: 0,
+                    duration: 0.8,
+                    delay: 0.6,
+                    ease: 'power2.out'
+                }
+            );
+
+            // Filter tabs animation
+            gsap.fromTo(filterRef.current,
+                { y: 20 },
+                {
+                    y: 0,
+                    duration: 0.8,
+                    delay: 0.9,
+                    ease: 'power2.out'
+                }
+            );
+
+            // Cards animation on load
+            gsap.from('.product-card', {
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                delay: 1.2,
+                ease: 'power2.out'
+            });
+
+        }, containerRef);
+
+        return () => ctx.revert();
     }, []);
 
     // Show/hide cart summary based on cart items
@@ -170,10 +244,34 @@ const Shop = () => {
     // Filter products
     const filteredProducts = products.filter(product => {
         const matchesFilter = activeFilter === 'all' || product.category === activeFilter;
-        const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                             product.description.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesFilter && matchesSearch;
+        return matchesFilter;
     });
+
+    // Handle filter change
+    const handleFilterChange = (filterId) => {
+        setActiveFilter(filterId);
+        // Animate cards
+        gsap.to('.product-card', {
+            opacity: 0,
+            y: 50,
+            duration: 0.4,
+            stagger: 0.05,
+            onComplete: () => {
+                setTimeout(() => {
+                    gsap.fromTo('.product-card',
+                        { opacity: 0, y: 50 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.6,
+                            stagger: 0.08,
+                            ease: 'power2.out'
+                        }
+                    );
+                }, 100);
+            }
+        });
+    };
 
     // Handle color selection
     const handleColorSelect = (productId, color) => {
@@ -213,13 +311,15 @@ const Shop = () => {
         // Animate the button
         const button = document.querySelector(`.add-to-cart-btn[data-product="${product.id}"]`);
         if (button) {
+            button.classList.add('added');
             gsap.to(button, {
                 backgroundColor: '#4CAF50',
                 duration: 0.3,
                 onComplete: () => {
                     setTimeout(() => {
+                        button.classList.remove('added');
                         gsap.to(button, {
-                            backgroundColor: '#000',
+                            backgroundColor: '#dc2626',
                             duration: 0.3
                         });
                     }, 1000);
@@ -396,7 +496,7 @@ const Shop = () => {
         const totalText = `Total: LKR ${calculateTotal().toLocaleString()}`;
         const message = `Hello! I'd like to order:%0A%0A${itemsText}%0A%0A${totalText}%0A%0APlease confirm availability and payment details.`;
         
-        return `https://wa.me/94700000000?text=${message}`; // Replace with your WhatsApp number
+        return `https://wa.me/94700000000?text=${message}`;
     };
 
     // Handle checkout
@@ -437,37 +537,32 @@ const Shop = () => {
             />
             
             <div className="shop-layout">
-                {/* Hero Section */}
+                {/* Hero Section - FIXED: Removed opacity transform from elements */}
                 <section className="shop-hero">
-                    <h1 className="shop-title">Shop</h1>
-                    <p className="shop-description">
+                    <h1 ref={titleRef} className="shop-title" style={{ opacity: 1 }}>Shop</h1>
+                    <p ref={descriptionRef} className="shop-description" style={{ opacity: 1 }}>
                         Discover our collection of digital products, designs, and creative solutions.
                         All items are crafted with attention to detail and quality.
                     </p>
                 </section>
 
                 {/* Filters */}
-                <section className="shop-filters">
+                <section ref={filterRef} className="shop-filters" style={{ opacity: 1 }}>
                     <div className="filter-tabs">
-                        {filters.map((filter) => (
-                            <button
-                                key={filter.id}
-                                className={`filter-tab ${activeFilter === filter.id ? 'active' : ''}`}
-                                onClick={() => setActiveFilter(filter.id)}
-                            >
-                                {filter.label}
-                            </button>
+                        {filters.map((filter, index) => (
+                            <React.Fragment key={filter.id}>
+                                <button
+                                    data-filter={filter.id}
+                                    className={`filter-tab ${activeFilter === filter.id ? 'active' : ''}`}
+                                    onClick={() => handleFilterChange(filter.id)}
+                                >
+                                    {filter.label}
+                                </button>
+                                {index < filters.length - 1 && (
+                                    <span className="filter-separator">|</span>
+                                )}
+                            </React.Fragment>
                         ))}
-                    </div>
-                    
-                    <div className="search-box">
-                        <input
-                            type="text"
-                            className="search-input"
-                            placeholder="Search products..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
                     </div>
                 </section>
 
@@ -480,6 +575,33 @@ const Shop = () => {
                                 data-product={product.id}
                                 className={`product-card ${expandedProduct === product.id ? 'expanded' : ''}`}
                             >
+                                {/* Product Image */}
+                                <div className="product-image-container">
+                                    <img 
+                                        src={getProductImage(product)} 
+                                        alt={product.name}
+                                        className="product-image"
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            // Fallback to a placeholder if shop1.jpeg doesn't exist
+                                            e.target.src = "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+                                        }}
+                                    />
+                                    
+                                    {/* Updated Expand Icon - "⤢" positioned below image on right side */}
+                                    <button 
+                                        className="expand-icon-bottom-right"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            toggleExpand(product.id);
+                                        }}
+                                        disabled={isExpanding}
+                                        title={expandedProduct === product.id ? "Collapse" : "Expand details"}
+                                    >
+                                        <span className="expand-icon">⤢</span>
+                                    </button>
+                                </div>
+
                                 {/* Close Button for Expanded View */}
                                 {expandedProduct === product.id && (
                                     <button 
@@ -492,18 +614,6 @@ const Shop = () => {
                                         <span className="close-icon">×</span>
                                     </button>
                                 )}
-
-                                {/* Product Image */}
-                                <div className="product-image-container">
-                                    <img 
-                                        src={getProductImage(product)} 
-                                        alt={product.name}
-                                        className="product-image"
-                                    />
-                                    {product.badge && (
-                                        <span className="product-badge">{product.badge}</span>
-                                    )}
-                                </div>
 
                                 {/* Product Content */}
                                 <div className="product-content">
@@ -529,9 +639,6 @@ const Shop = () => {
                                                     <div className="product-header-expanded">
                                                         <div className="product-meta-expanded">
                                                             <span className="product-category-expanded">{product.category}</span>
-                                                            {product.badge && (
-                                                                <span className="product-badge-expanded">{product.badge}</span>
-                                                            )}
                                                         </div>
                                                         <h3 className="product-title-expanded">{product.name}</h3>
                                                         <div className="product-price-expanded">
@@ -658,13 +765,14 @@ const Shop = () => {
                                                     addToCart(product);
                                                 }}
                                             >
+                                                <span className="cart-icon">🛒</span>
                                                 <span className="cart-text">Add to Cart</span>
                                                 <span className="cart-price">LKR {(product.price * product.quantity).toLocaleString()}</span>
                                             </button>
                                         </div>
                                     </div>
 
-                                    {/* Product Actions (for non-expanded view) */}
+                                    {/* Product Actions (for non-expanded view) - Just Add to Cart Button with Cart Icon */}
                                     <div className="product-actions">
                                         <button 
                                             className="add-to-cart-btn"
@@ -674,19 +782,8 @@ const Shop = () => {
                                                 addToCart(product);
                                             }}
                                         >
-                                            Add to Cart
-                                        </button>
-                                        <button 
-                                            className="expand-btn"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                toggleExpand(product.id);
-                                            }}
-                                            disabled={isExpanding}
-                                        >
-                                            <span className="expand-icon">
-                                                {expandedProduct === product.id ? '▲' : '▼'}
-                                            </span>
+                                            <span className="cart-icon">🛒</span>
+                                            ADD TO CART
                                         </button>
                                     </div>
                                 </div>
@@ -698,13 +795,10 @@ const Shop = () => {
                     {filteredProducts.length === 0 && (
                         <div className="empty-state">
                             <div className="empty-icon">🛒</div>
-                            <p>No products found matching your search.</p>
+                            <p>No products found matching your selection.</p>
                             <button 
                                 className="filter-tab"
-                                onClick={() => {
-                                    setActiveFilter('all');
-                                    setSearchQuery('');
-                                }}
+                                onClick={() => setActiveFilter('all')}
                             >
                                 Show All Products
                             </button>
@@ -724,6 +818,7 @@ const Shop = () => {
                     onClick={handleCheckout}
                     disabled={cart.length === 0}
                 >
+                    <span className="whatsapp-icon">📱</span>
                     Proceed to WhatsApp Order
                 </button>
             </div>
@@ -772,13 +867,13 @@ const Shop = () => {
                             className="cancel-btn"
                             onClick={() => setShowWhatsAppModal(false)}
                         >
-                            Cancel
+                            <span>✕</span> Cancel
                         </button>
                         <button 
                             className="confirm-btn"
                             onClick={confirmOrder}
                         >
-                            Send via WhatsApp
+                            <span>📱</span> Send via WhatsApp
                         </button>
                     </div>
                 </div>

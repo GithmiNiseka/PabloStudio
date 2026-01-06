@@ -4,14 +4,15 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import BusinessBoxes from '../components/BusinessBoxes'; // Import the component
+import OwnerSignature from '../components/OwnerSignature';
 import './Media.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Media = () => {
     const [activeFilter, setActiveFilter] = useState('all');
-    const [activeBusiness, setActiveBusiness] = useState('all');
+    const [activeBusiness, setActiveBusiness] = useState(null);
+    const [hoveredBusiness, setHoveredBusiness] = useState(null);
     const containerRef = useRef();
     const cardRefs = useRef([]);
 
@@ -130,19 +131,38 @@ const Media = () => {
         { id: 'youtube', label: 'YouTube' }
     ];
 
-    // Combine business and type filters
-    const combinedFilter = activeFilter === 'all' && activeBusiness === 'all';
+    const businesses = [
+        { 
+            id: 'thotilla',
+            name: 'Thotilla', 
+            color: '#dc2626'
+        },
+        { 
+            id: 'suvinor',
+            name: 'Suvinor', 
+            color: '#dc2626'
+        },
+        { 
+            id: 'epablo',
+            name: 'Pablo', 
+            color: '#dc2626'
+        }
+    ];
 
     // Filter media items
     const filteredMedia = mediaData.filter(item => {
         const typeMatch = activeFilter === 'all' || item.type === activeFilter;
-        const businessMatch = activeBusiness === 'all' || item.business === activeBusiness;
+        const businessMatch = activeBusiness === null || item.business === activeBusiness;
         return typeMatch && businessMatch;
     });
 
     // Handle business change
     const handleBusinessChange = (businessId) => {
-        setActiveBusiness(businessId);
+        if (activeBusiness === businessId) {
+            setActiveBusiness(null);
+        } else {
+            setActiveBusiness(businessId);
+        }
         // Also animate cards
         animateCards();
     };
@@ -178,23 +198,73 @@ const Media = () => {
         });
     };
 
+    // Helper functions for business box hover effects
+    const updateBusinessBoxHover = (businessId) => {
+        // Remove hover effect from all business boxes
+        document.querySelectorAll('.business-box').forEach(box => {
+            box.classList.remove('hover-effect');
+        });
+        
+        // Add hover effect to the specific business box
+        if (businessId) {
+            const businessBox = document.querySelector(`.business-box[data-business="${businessId}"]`);
+            if (businessBox && !businessBox.classList.contains('active')) {
+                businessBox.classList.add('hover-effect');
+            }
+        }
+    };
+
+    const removeBusinessBoxHover = () => {
+        document.querySelectorAll('.business-box').forEach(box => {
+            if (!box.classList.contains('active')) {
+                box.classList.remove('hover-effect');
+            }
+        });
+    };
+
+    // Handle project hover with business box effect
+    const handleProjectHover = (item, index) => {
+        const businessId = item.business;
+        
+        // Add visual feedback to business box
+        updateBusinessBoxHover(businessId);
+        
+        const cardElement = document.querySelector(`.media-card-bento[data-index="${index}"]`);
+        if (cardElement) {
+            gsap.to(cardElement, {
+                scale: 1.03,
+                duration: 0.3,
+                ease: 'power2.out',
+                boxShadow: '0 20px 40px rgba(220, 38, 38, 0.3)',
+                zIndex: 10
+            });
+        }
+    };
+
+    const handleProjectLeave = (index) => {
+        // Remove visual feedback from business boxes
+        removeBusinessBoxHover();
+        
+        const cardElement = document.querySelector(`.media-card-bento[data-index="${index}"]`);
+        if (cardElement) {
+            gsap.to(cardElement, {
+                scale: 1,
+                duration: 0.3,
+                ease: 'power2.out',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                zIndex: 1
+            });
+        }
+    };
+
     // Initialize animations
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Hero animation
-            gsap.to('.media-hero', {
-                opacity: 1,
-                y: 0,
-                duration: 1.2,
-                ease: 'power2.out'
-            });
-
-            // Title line animation
-            gsap.to('.title-line', {
+            // Title animation
+            gsap.to('.media-title', {
                 y: 0,
                 opacity: 1,
                 duration: 1,
-                stagger: 0.2,
                 delay: 0.3,
                 ease: 'power2.out'
             });
@@ -204,7 +274,7 @@ const Media = () => {
                 opacity: 1,
                 y: 0,
                 duration: 0.8,
-                delay: 0.8,
+                delay: 0.6,
                 ease: 'power2.out'
             });
 
@@ -213,7 +283,7 @@ const Media = () => {
                 opacity: 1,
                 y: 0,
                 duration: 0.8,
-                delay: 1,
+                delay: 0.9,
                 ease: 'power2.out'
             });
 
@@ -272,16 +342,6 @@ const Media = () => {
         });
     };
 
-    // Get type label - minimalist vertical text
-    const getTypeLabel = (type) => {
-        switch(type) {
-            case 'blog': return 'BLOG';
-            case 'tv': return 'TV';
-            case 'youtube': return 'VIDEO';
-            default: return type.toUpperCase();
-        }
-    };
-
     // Format date
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -293,105 +353,130 @@ const Media = () => {
     };
 
     return (
-        <div ref={containerRef} className="media-page">
+        <div ref={containerRef} className="media-page vertical-portfolio">
             <Nav />
             
-            {/* Business Boxes Component */}
-            <BusinessBoxes 
-                activeBusiness={activeBusiness}
-                onBusinessChange={handleBusinessChange}
-                showAll={true}
-            />
+            {/* Left Side Business Boxes - WITHOUT "All" tab */}
+            <div className="business-boxes-sidebar">
+                {businesses.map((business) => (
+                    <button
+                        key={business.id}
+                        className={`business-box ${activeBusiness === business.id ? 'active' : ''}`}
+                        data-business={business.id}
+                        onClick={() => handleBusinessChange(business.id)}
+                        onMouseEnter={() => {
+                            setHoveredBusiness(business.id);
+                            updateBusinessBoxHover(business.id);
+                        }}
+                        onMouseLeave={() => {
+                            setHoveredBusiness(null);
+                            removeBusinessBoxHover();
+                        }}
+                        style={{
+                            backgroundColor: (activeBusiness === business.id) ? business.color : 'transparent',
+                            color: (activeBusiness === business.id) ? '#000000' : '#ffffff',
+                            borderColor: (activeBusiness === business.id) ? business.color : '#ffffff',
+                            borderWidth: '1px',
+                            borderStyle: 'solid'
+                        }}
+                    >
+                        <span className="business-name">
+                            {business.name}
+                        </span>
+                    </button>
+                ))}
+            </div>
             
-            <div className="media-layout">
+            {/* Right Side Owner Signature */}
+            <OwnerSignature />
+
+            <div className="media-layout vertical-content">
                 {/* Hero Section */}
-                <section className="media-hero">
-                    <h1 className="media-title">
-                        <span className="title-line">Media &</span>
-                        <span className="title-line">Publications</span>
+                <section className="media-hero vertical-hero">
+                    <h1 className="media-title vertical-page-title">
+                        Media & Publications
                     </h1>
-                    <p className="media-description">
+                    <p className="media-description vertical-page-description">
                         Featured appearances, insightful blogs, and engaging video content 
                         showcasing our journey and expertise.
                     </p>
                 </section>
 
-                {/* Filter Tabs */}
+                {/* Filter Tabs - CLEAN TEXT-ONLY STYLE */}
                 <section className="media-filter">
                     <div className="filter-tabs">
-                        {filters.map((filter) => (
-                            <button
-                                key={filter.id}
-                                data-filter={filter.id}
-                                className={`filter-tab ${activeFilter === filter.id ? 'active' : ''}`}
-                                onClick={() => handleFilterChange(filter.id)}
-                            >
-                                {filter.label}
-                            </button>
+                        {filters.map((filter, index) => (
+                            <React.Fragment key={filter.id}>
+                                <button
+                                    data-filter={filter.id}
+                                    className={`filter-tab ${activeFilter === filter.id ? 'active' : ''}`}
+                                    onClick={() => handleFilterChange(filter.id)}
+                                >
+                                    {filter.label}
+                                </button>
+                                {index < filters.length - 1 && (
+                                    <span className="filter-separator">|</span>
+                                )}
+                            </React.Fragment>
                         ))}
                     </div>
                 </section>
 
                 {/* Bento Media Grid */}
                 <section className="media-content">
-                    <div className="media-grid-bento">
+                    <div className="media-grid-bento bento-projects-grid">
                         {filteredMedia.map((item, index) => (
                             <div 
                                 key={item.id}
                                 ref={el => cardRefs.current[index] = el}
-                                className={`media-card-bento ${item.size || 'small'}`}
+                                className={`media-card-bento bento-project-item ${item.size || 'small'}`}
+                                data-index={index}
+                                onMouseEnter={() => handleProjectHover(item, index)}
+                                onMouseLeave={() => handleProjectLeave(index)}
                                 onClick={(e) => handleMediaClick(item, e)}
                             >
                                 {/* Media Thumbnail/Video */}
-                                <img 
-                                    src={item.thumbnail}
-                                    alt={item.title}
-                                    className="media-thumbnail-bento"
-                                />
-                                
-                                {/* Vertical Type Label - MINIMALIST */}
-                                <div className="media-type-label">
-                                    {getTypeLabel(item.type)}
-                                    <div className="type-line"></div>
+                                <div className="project-image-container-bento">
+                                    <img 
+                                        src={item.thumbnail}
+                                        alt={item.title}
+                                        className="project-image-bento media-thumbnail-bento"
+                                    />
+                                    <div className="image-overlay-bento"></div>
                                 </div>
                                 
-                                {/* Minimalist duration for videos */}
-                                {(item.type === 'youtube' || item.type === 'tv') && item.duration && (
-                                    <div className="media-duration">
-                                        {item.duration}
-                                    </div>
-                                )}
-                                
-                                {/* Content Area - ALWAYS VISIBLE */}
-                                <div className="media-content-area">
+                                {/* Content Area */}
+                                <div className="media-content-area project-content-bento">
                                     <div className="media-info">
-                                        <span className="media-date-bento">
-                                            {formatDate(item.date)}
-                                        </span>
-                                        
-                                        <h3 className="media-title-bento">
+                                        <div className="project-header-bento">
+                                            <span className="media-date-bento project-date-bento">
+                                                {formatDate(item.date)}
+                                            </span>
+                                        </div>
+
+                                        <h3 className="media-title-bento project-title-bento">
                                             {item.title}
                                         </h3>
                                         
-                                        <p className="media-excerpt-bento">
+                                        <p className="media-excerpt-bento project-description-bento">
                                             {item.excerpt}
                                         </p>
                                     </div>
 
-                                    {/* Footer - ALWAYS VISIBLE */}
-                                    <div className="media-footer-bento">
-                                        <span className="media-source-bento">
+                                    {/* Footer */}
+                                    <div className="media-footer-bento project-footer-bento">
+                                        <span className="media-source-bento project-category-bento">
                                             {item.source}
                                         </span>
                                         <button 
-                                            className="media-link-bento"
+                                            className="media-link-bento view-button-bento"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleMediaClick(item, e);
                                             }}
                                         >
                                             VIEW
-                                            <svg width="14" height="14" viewBox="0 0 16 16">
+                                            <svg className="arrow-bento" width="14" height="14" viewBox="0 0 16 16">
                                                 <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z" fill="currentColor"/>
                                             </svg>
                                         </button>
@@ -403,14 +488,14 @@ const Media = () => {
 
                     {/* Empty State */}
                     {filteredMedia.length === 0 && (
-                        <div className="media-empty">
-                            <div className="media-empty-icon">—</div>
+                        <div className="media-empty empty-state-vertical">
+                            <div className="media-empty-icon empty-icon-vertical">—</div>
                             <p>No media content found for this category.</p>
                             <button 
-                                className="filter-tab"
+                                className="reset-filters-btn"
                                 onClick={() => {
                                     setActiveFilter('all');
-                                    setActiveBusiness('all');
+                                    setActiveBusiness(null);
                                 }}
                             >
                                 Show All Media

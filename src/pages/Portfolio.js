@@ -1,27 +1,27 @@
 // src/pages/Portfolio.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
+import OwnerSignature from '../components/OwnerSignature'; // Import OwnerSignature
 import projects from '../data/projects';
 import './Portfolio.css';
 
+// Import the image helper
+import { getImportedImage } from './imageImports';
+
 const Portfolio = () => {
-    // Change default to null (showing all) instead of specific business
     const [activeBusiness, setActiveBusiness] = useState(null);
     const [hoveredBusiness, setHoveredBusiness] = useState(null);
     const [selectedProject, setSelectedProject] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [activeImageIndex, setActiveImageIndex] = useState(0);
-    
-    // Gallery lightbox state
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
     const [galleryImages, setGalleryImages] = useState([]);
-    
     const [isInitialLoad, setIsInitialLoad] = useState(true);
+    const gridRef = useRef(null);
 
-    // Define businesses (NO 'all' button)
     const businesses = [
         { 
             id: 'thotilla',
@@ -46,12 +46,10 @@ const Portfolio = () => {
         }
     ];
 
-    // Filter projects - if activeBusiness is null, show ALL
     const filteredProjects = activeBusiness === null 
         ? projects 
         : projects.filter(p => p.business === activeBusiness);
 
-    // Get active business data for hero section
     const getActiveBusinessData = () => {
         if (activeBusiness === null) {
             return {
@@ -65,94 +63,74 @@ const Portfolio = () => {
 
     const activeBusinessData = getActiveBusinessData();
 
-    // Get business color
     const getBusinessColor = (businessId) => {
         const business = businesses.find(b => b.id === businessId);
         return business ? business.color : '#dc2626';
     };
 
-    // Function to get correct image path based on business
-    const getImagePath = (project) => {
-        if (!project.image) return '/placeholder-image.jpg';
+    // Helper functions for business box hover effects
+    const updateBusinessBoxHover = (businessId) => {
+        // Remove hover effect from all business boxes
+        document.querySelectorAll('.business-box').forEach(box => {
+            box.classList.remove('hover-effect');
+        });
         
-        // If image already has a full path or URL, return as is
-        if (project.image.startsWith('http') || project.image.startsWith('/')) {
-            return project.image;
+        // Add hover effect to the specific business box
+        if (businessId) {
+            const businessBox = document.querySelector(`.business-box[data-business="${businessId}"]`);
+            if (businessBox && !businessBox.classList.contains('active')) {
+                businessBox.classList.add('hover-effect');
+            }
         }
-        
-        // Get business folder name
-        let businessFolder = '';
-        switch(project.business) {
-            case 'thotilla':
-                businessFolder = 'thot';
-                break;
-            case 'suvinor':
-                businessFolder = 'souv';
-                break;
-            case 'epablo':
-                businessFolder = 'pablo';
-                break;
-            default:
-                businessFolder = project.business;
-        }
-        
-        // Construct path to asset folder
-        return `/assets/${businessFolder}/${project.image}`;
     };
 
-    // Function to get gallery images with correct paths
-    const getGalleryImages = (project) => {
+    const removeBusinessBoxHover = () => {
+        document.querySelectorAll('.business-box').forEach(box => {
+            if (!box.classList.contains('active')) {
+                box.classList.remove('hover-effect');
+            }
+        });
+    };
+
+    // Get image using imports
+    const getImagePath = (project) => {
+        if (!project.image) {
+            return getImportedImage('souv1.jpeg');
+        }
+        
+        const importedImage = getImportedImage(project.image);
+        if (importedImage) {
+            return importedImage;
+        }
+        
+        // Fallback
+        return getImportedImage('souv1.jpeg');
+    };
+
+    // Get ALL images for a project
+    const getAllProjectImages = (project) => {
         const images = [];
         
-        // Add main image first
-        images.push(getImagePath(project));
+        // Add main image
+        const mainImage = getImagePath(project);
+        if (mainImage) images.push(mainImage);
         
         // Add additional images if they exist
         if (project.additionalImages && project.additionalImages.length > 0) {
             project.additionalImages.forEach(img => {
-                if (img.startsWith('http') || img.startsWith('/')) {
-                    images.push(img);
-                } else {
-                    let businessFolder = '';
-                    switch(project.business) {
-                        case 'thotilla':
-                            businessFolder = 'thot';
-                            break;
-                        case 'suvinor':
-                            businessFolder = 'souv';
-                            break;
-                        case 'epablo':
-                            businessFolder = 'pablo';
-                            break;
-                        default:
-                            businessFolder = project.business;
-                    }
-                    images.push(`/assets/${businessFolder}/${img}`);
+                const importedImg = getImportedImage(img);
+                if (importedImg) {
+                    images.push(importedImg);
                 }
             });
         }
         
-        // Add gallery images if they exist
+        // Also check gallery array
         if (project.gallery && project.gallery.length > 0) {
             project.gallery.forEach(img => {
-                if (img.startsWith('http') || img.startsWith('/')) {
-                    images.push(img);
-                } else {
-                    let businessFolder = '';
-                    switch(project.business) {
-                        case 'thotilla':
-                            businessFolder = 'thot';
-                            break;
-                        case 'suvinor':
-                            businessFolder = 'souv';
-                            break;
-                        case 'epablo':
-                            businessFolder = 'pablo';
-                            break;
-                        default:
-                            businessFolder = project.business;
-                    }
-                    images.push(`/assets/${businessFolder}/${img}`);
+                const importedImg = getImportedImage(img);
+                if (importedImg) {
+                    images.push(importedImg);
                 }
             });
         }
@@ -160,7 +138,12 @@ const Portfolio = () => {
         return images;
     };
 
-    // IMPROVED Bento layout patterns
+    // Get only gallery images
+    const getGalleryImages = (project) => {
+        const allImages = getAllProjectImages(project);
+        return allImages.slice(1);
+    };
+
     const getBentoLayout = (index, totalItems) => {
         const patterns = [
             'normal', 'normal', 'tall',
@@ -183,12 +166,6 @@ const Portfolio = () => {
         return `bento-project-item ${bentoType}`;
     };
 
-    // Get all project images including gallery
-    const getAllProjectImages = (project) => {
-        return getGalleryImages(project);
-    };
-
-    // Handle business change
     const handleBusinessChange = (businessId) => {
         if (activeBusiness === businessId) {
             setActiveBusiness(null);
@@ -199,14 +176,16 @@ const Portfolio = () => {
         gsap.to('.bento-project-item', {
             opacity: 0,
             y: 30,
+            scale: 0.95,
             duration: 0.3,
             stagger: 0.05,
             onComplete: () => {
                 gsap.fromTo('.bento-project-item',
-                    { opacity: 0, y: 30 },
+                    { opacity: 0, y: 30, scale: 0.95 },
                     {
                         opacity: 1,
                         y: 0,
+                        scale: 1,
                         duration: 0.6,
                         stagger: 0.08,
                         ease: 'power2.out'
@@ -216,24 +195,51 @@ const Portfolio = () => {
         });
     };
 
-    // Handle project hover - highlight corresponding business box
-    const handleProjectHover = (project) => {
+    const handleProjectHover = (project, index) => {
         const businessId = project.business;
         setHoveredBusiness(businessId);
+        
+        // Add visual feedback to business box
+        updateBusinessBoxHover(businessId);
+        
+        const item = document.querySelector(`.bento-project-item[data-index="${index}"]`);
+        if (item) {
+            gsap.to(item, {
+                scale: 1.03,
+                duration: 0.3,
+                ease: 'power2.out',
+                boxShadow: '0 20px 40px rgba(220, 38, 38, 0.3)',
+                zIndex: 10
+            });
+        }
     };
 
-    const handleProjectLeave = () => {
+    const handleProjectLeave = (index) => {
         setHoveredBusiness(null);
+        
+        // Remove visual feedback from business boxes
+        removeBusinessBoxHover();
+        
+        const item = document.querySelector(`.bento-project-item[data-index="${index}"]`);
+        if (item) {
+            gsap.to(item, {
+                scale: 1,
+                duration: 0.3,
+                ease: 'power2.out',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                zIndex: 1
+            });
+        }
     };
 
-    // Handle project click - OPEN POPUP
     const handleProjectClick = (projectId) => {
         const project = projects.find(p => p.id === projectId);
         if (!project) return;
 
         setSelectedProject(project);
-        const allImages = getAllProjectImages(project);
-        setGalleryImages(allImages.slice(1));
+        const galleryImgs = getGalleryImages(project);
+        setGalleryImages(galleryImgs);
+        setActiveImageIndex(0);
         
         setIsPopupOpen(true);
         document.body.style.overflow = 'hidden';
@@ -260,7 +266,6 @@ const Portfolio = () => {
         }, 10);
     };
 
-    // Close popup
     const closePopup = () => {
         gsap.to('.project-details-container', {
             y: '100%',
@@ -283,32 +288,27 @@ const Portfolio = () => {
         });
     };
 
-    // Handle overlay click
     const handleOverlayClick = (e) => {
         if (e.target.classList.contains('project-details-overlay')) {
             closePopup();
         }
     };
 
-    // Handle thumbnail click
     const handleThumbnailClick = (index) => {
         setActiveImageIndex(index);
     };
 
-    // Open gallery lightbox
     const openLightbox = (index) => {
         setLightboxIndex(index);
         setIsLightboxOpen(true);
         document.body.style.overflow = 'hidden';
     };
 
-    // Close gallery lightbox
     const closeLightbox = () => {
         setIsLightboxOpen(false);
         document.body.style.overflow = isPopupOpen ? 'hidden' : 'auto';
     };
 
-    // Navigate lightbox images
     const navigateLightbox = (direction) => {
         const allImages = getAllProjectImages(selectedProject);
         let newIndex = lightboxIndex + direction;
@@ -319,19 +319,12 @@ const Portfolio = () => {
         setLightboxIndex(newIndex);
     };
 
-    // Handle external link click
-    const handleExternalLink = (url) => {
-        window.open(url, '_blank', 'noopener,noreferrer');
-    };
-
-    // Helper function for short description
     const getShortDescription = (description) => {
         if (!description) return 'Project description';
         const words = description.split(' ');
-        return words.slice(0, 6).join(' ') + (words.length > 6 ? '...' : '');
+        return words.slice(0, 12).join(' ') + (words.length > 12 ? '...' : '');
     };
 
-    // Get default timeline data
     const getTimelineData = (project) => {
         if (project.timeline && project.timeline.length > 0) {
             return project.timeline;
@@ -346,7 +339,6 @@ const Portfolio = () => {
         ];
     };
 
-    // Get default tech stack
     const getTechStack = (project) => {
         if (project.technologies && project.technologies.length > 0) {
             return project.technologies;
@@ -355,39 +347,64 @@ const Portfolio = () => {
         return ['React', 'Node.js', 'MongoDB', 'Express', 'Figma', 'AWS'];
     };
 
-    // Initialize animations
     useEffect(() => {
-        setIsInitialLoad(false);
+        const items = document.querySelectorAll('.bento-project-item');
         
-        if (!isInitialLoad && filteredProjects.length > 0) {
+        if (items.length > 0) {
+            gsap.set(items, {
+                opacity: 0,
+                y: 50,
+                scale: 0.9
+            });
+            
+            gsap.to(items, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power2.out',
+                delay: 0.3
+            });
+        }
+        
+        setIsInitialLoad(false);
+    }, []);
+
+    useEffect(() => {
+        if (!isInitialLoad) {
             const items = document.querySelectorAll('.bento-project-item');
             
             if (items.length > 0) {
-                gsap.set(items, { clearProps: 'all' });
-                
-                gsap.fromTo(items,
-                    {
-                        y: 30,
-                        opacity: 0
-                    },
-                    {
-                        y: 0,
-                        opacity: 1,
-                        duration: 0.8,
-                        stagger: 0.1,
-                        ease: 'power2.out',
-                        delay: 0.1
+                gsap.to(items, {
+                    opacity: 0,
+                    y: 30,
+                    scale: 0.95,
+                    duration: 0.3,
+                    onComplete: () => {
+                        gsap.set(items, { clearProps: 'all' });
+                        
+                        gsap.set(items, {
+                            opacity: 0,
+                            y: 30,
+                            scale: 0.95
+                        });
+                        
+                        gsap.to(items, {
+                            opacity: 1,
+                            y: 0,
+                            scale: 1,
+                            duration: 0.6,
+                            stagger: 0.08,
+                            ease: 'power2.out'
+                        });
                     }
-                );
+                });
             }
-        } else {
-            gsap.set('.bento-project-item', {
-                opacity: 1,
-                y: 0
-            });
         }
+    }, [activeBusiness]);
 
-        // Handle ESC key
+    useEffect(() => {
         const handleEscKey = (e) => {
             if (e.key === 'Escape') {
                 if (isLightboxOpen) {
@@ -400,9 +417,8 @@ const Portfolio = () => {
 
         window.addEventListener('keydown', handleEscKey);
         return () => window.removeEventListener('keydown', handleEscKey);
-    }, [activeBusiness, isPopupOpen, isLightboxOpen]);
+    }, [isPopupOpen, isLightboxOpen]);
 
-    // Handle body class for blur effect
     useEffect(() => {
         if (isPopupOpen) {
             document.body.classList.add('popup-open');
@@ -425,19 +441,26 @@ const Portfolio = () => {
         <div className="portfolio-page vertical-portfolio">
             <Nav />
             
-            {/* Vertical Business Boxes */}
+            {/* Left Side Business Boxes - Aligned with left border */}
             <div className="business-boxes-sidebar">
                 {businesses.map((business) => (
                     <button
                         key={business.id}
                         className={`business-box ${activeBusiness === business.id ? 'active' : ''}`}
+                        data-business={business.id}
                         onClick={() => handleBusinessChange(business.id)}
-                        onMouseEnter={() => setHoveredBusiness(business.id)}
-                        onMouseLeave={() => setHoveredBusiness(null)}
+                        onMouseEnter={() => {
+                            setHoveredBusiness(business.id);
+                            updateBusinessBoxHover(business.id);
+                        }}
+                        onMouseLeave={() => {
+                            setHoveredBusiness(null);
+                            removeBusinessBoxHover();
+                        }}
                         style={{
                             backgroundColor: (activeBusiness === business.id) ? business.color : 'transparent',
                             color: (activeBusiness === business.id) ? '#000000' : '#ffffff',
-                            borderColor: (activeBusiness === business.id || hoveredBusiness === business.id) ? business.color : '#ffffff',
+                            borderColor: (activeBusiness === business.id) ? business.color : '#ffffff',
                             borderWidth: '1px',
                             borderStyle: 'solid'
                         }}
@@ -449,9 +472,10 @@ const Portfolio = () => {
                 ))}
             </div>
 
-            {/* Main Content */}
+            {/* Right Side Owner Signature */}
+            <OwnerSignature />
+
             <main className="vertical-content">
-                {/* Hero */}
                 <section className="portfolio-hero vertical-hero">
                     <div className="content-wrapper">
                         <h1 className="vertical-page-title">
@@ -463,73 +487,79 @@ const Portfolio = () => {
                     </div>
                 </section>
 
-                {/* Bento Style Projects Grid */}
                 <section className="projects-section">
                     <div className="content-wrapper">
-                        <div className="bento-projects-grid">
-                            {filteredProjects.map((project, index) => (
-                                <div
-                                    key={project.id}
-                                    data-id={project.id}
-                                    data-business={project.business}
-                                    className={getBentoClass(index)}
-                                    onMouseEnter={() => handleProjectHover(project)}
-                                    onMouseLeave={handleProjectLeave}
-                                    onClick={() => handleProjectClick(project.id)}
-                                >
-                                    {/* Project Image */}
-                                    <div className="project-image-container-bento">
-                                        <img 
-                                            src={getImagePath(project)} 
-                                            alt={project.title}
-                                            className="project-image-bento"
-                                            onError={(e) => {
-                                                e.target.src = '/placeholder-image.jpg';
-                                            }}
-                                        />
-                                        <div className="image-overlay-bento"></div>
-                                    </div>
+                        <div className="bento-projects-grid" ref={gridRef}>
+                            {filteredProjects.map((project, index) => {
+                                const imageSrc = getImagePath(project);
+                                
+                                return (
+                                    <div
+                                        key={project.id}
+                                        data-id={project.id}
+                                        data-business={project.business}
+                                        data-index={index}
+                                        className={getBentoClass(index)}
+                                        onMouseEnter={() => handleProjectHover(project, index)}
+                                        onMouseLeave={() => handleProjectLeave(index)}
+                                        onClick={() => handleProjectClick(project.id)}
+                                    >
+                                        <div className="project-image-container-bento">
+                                            <img 
+                                                src={imageSrc}
+                                                alt={project.title}
+                                                className="project-image-bento"
+                                                onError={(e) => {
+                                                    e.target.style.backgroundColor = '#222';
+                                                    e.target.style.minHeight = '150px';
+                                                    e.target.style.display = 'flex';
+                                                    e.target.style.alignItems = 'center';
+                                                    e.target.style.justifyContent = 'center';
+                                                    e.target.innerHTML = `<div style="color: #666; font-size: 12px;">${project.category}</div>`;
+                                                }}
+                                            />
+                                            <div className="image-overlay-bento"></div>
+                                        </div>
 
-                                    {/* Project Content */}
-                                    <div className="project-content-bento">
-                                        <div className="project-header-bento">
-                                            <div className="project-date-bento">
-                                                {project.date || project.year || '2023'}
+                                        <div className="project-content-bento">
+                                            <div className="project-header-bento">
+                                                <div className="project-date-bento">
+                                                    {project.date || project.year || '2024'}
+                                                </div>
+                                            </div>
+
+                                            <h3 className="project-title-bento">
+                                                {project.title}
+                                            </h3>
+                                            
+                                            <p className="project-description-bento">
+                                                {getShortDescription(project.description)}
+                                            </p>
+
+                                            <div className="project-footer-bento">
+                                                <span className="project-category-bento" style={{ color: getBusinessColor(project.business) }}>
+                                                    {project.category || 'Project'}
+                                                </span>
+                                                <button 
+                                                    className="view-button-bento"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleProjectClick(project.id);
+                                                    }}
+                                                    style={{ color: getBusinessColor(project.business) }}
+                                                >
+                                                    View
+                                                    <svg className="arrow-bento" width="16" height="16" viewBox="0 0 16 16">
+                                                        <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z" fill="currentColor"/>
+                                                    </svg>
+                                                </button>
                                             </div>
                                         </div>
-
-                                        <h3 className="project-title-bento">
-                                            {project.title}
-                                        </h3>
-                                        
-                                        <p className="project-description-bento">
-                                            {getShortDescription(project.description)}
-                                        </p>
-
-                                        <div className="project-footer-bento">
-                                            <span className="project-category-bento" style={{ color: getBusinessColor(project.business) }}>
-                                                {project.category || 'Project'}
-                                            </span>
-                                            <button 
-                                                className="view-button-bento"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleProjectClick(project.id);
-                                                }}
-                                                style={{ color: getBusinessColor(project.business) }}
-                                            >
-                                                View
-                                                <svg className="arrow-bento" width="16" height="16" viewBox="0 0 16 16">
-                                                    <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z" fill="currentColor"/>
-                                                </svg>
-                                            </button>
-                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
-                        {/* Empty State */}
                         {filteredProjects.length === 0 && (
                             <div className="empty-state-vertical">
                                 <div className="empty-icon-vertical">—</div>
@@ -540,7 +570,6 @@ const Portfolio = () => {
                 </section>
             </main>
 
-            {/* Project Details Popup */}
             {selectedProject && (
                 <div 
                     className={`project-details-overlay ${isPopupOpen ? 'active' : ''}`} 
@@ -554,12 +583,19 @@ const Portfolio = () => {
                         <div className="popup-handle"></div>
                         
                         <div className="project-details-content">
-                            {/* Project Images */}
                             <div className="project-details-images">
                                 <img 
                                     src={getAllProjectImages(selectedProject)[activeImageIndex]} 
                                     alt={selectedProject.title}
                                     className="main-project-image"
+                                    onError={(e) => {
+                                        e.target.style.backgroundColor = '#222';
+                                        e.target.style.minHeight = '400px';
+                                        e.target.style.display = 'flex';
+                                        e.target.style.alignItems = 'center';
+                                        e.target.style.justifyContent = 'center';
+                                        e.target.innerHTML = '<div style="color: #666; font-size: 14px;">Image not found</div>';
+                                    }}
                                 />
                                 
                                 {getAllProjectImages(selectedProject).length > 1 && (
@@ -571,15 +607,17 @@ const Portfolio = () => {
                                                 alt={`${selectedProject.title} - ${index + 1}`}
                                                 className={`thumbnail ${index === activeImageIndex ? 'active' : ''}`}
                                                 onClick={() => handleThumbnailClick(index)}
+                                                onError={(e) => {
+                                                    e.target.style.backgroundColor = '#333';
+                                                    e.target.style.minHeight = '80px';
+                                                }}
                                             />
                                         ))}
                                     </div>
                                 )}
                             </div>
 
-                            {/* Project Info */}
                             <div className="project-details-info">
-                                {/* Header */}
                                 <div className="project-details-header">
                                     <div className="project-breadcrumb">
                                         <span className="project-breadcrumb-item" style={{ color: getBusinessColor(selectedProject.business) }}>
@@ -598,12 +636,11 @@ const Portfolio = () => {
                                             {selectedProject.category || 'Project'}
                                         </span>
                                         <span className="project-details-year">
-                                            {selectedProject.year || '2023'}
+                                            {selectedProject.year || '2024'}
                                         </span>
                                     </div>
                                 </div>
 
-                                {/* Description */}
                                 <div className="project-details-description">
                                     {selectedProject.fullDescription ? (
                                         <div dangerouslySetInnerHTML={{ __html: selectedProject.fullDescription }} />
@@ -612,7 +649,6 @@ const Portfolio = () => {
                                     )}
                                 </div>
 
-                                {/* Features */}
                                 {selectedProject.features && selectedProject.features.length > 0 && (
                                     <div className="project-features">
                                         <h4>Key Features</h4>
@@ -624,9 +660,8 @@ const Portfolio = () => {
                                     </div>
                                 )}
 
-                                {/* Tech Stack */}
                                 <div className="tech-stack-section">
-                                    <h3>Tech Stack</h3>
+                                    <h3>Tools & Materials</h3>
                                     <div className="tech-stack-grid">
                                         {getTechStack(selectedProject).map((tech, index) => (
                                             <span key={index} className="tech-item">
@@ -636,7 +671,6 @@ const Portfolio = () => {
                                     </div>
                                 </div>
 
-                                {/* Project Timeline */}
                                 <div className="project-timeline">
                                     <h3>Project Timeline</h3>
                                     {getTimelineData(selectedProject).map((item, index) => (
@@ -647,36 +681,10 @@ const Portfolio = () => {
                                     ))}
                                 </div>
 
-                                {/* Gallery Section */}
-                                {galleryImages.length > 0 && (
-                                    <div className="project-gallery-section">
-                                        <h3>Project Gallery</h3>
-                                        <div className="gallery-grid">
-                                            {galleryImages.map((img, index) => (
-                                                <div 
-                                                    key={index} 
-                                                    className="gallery-item"
-                                                    onClick={() => openLightbox(index + 1)}
-                                                >
-                                                    <img 
-                                                        src={img} 
-                                                        alt={`${selectedProject.title} gallery ${index + 1}`}
-                                                        className="gallery-image"
-                                                    />
-                                                    <div className="gallery-overlay">
-                                                        <span className="zoom-icon">🔍</span>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Stats */}
                                 <div className="project-stats">
                                     <div className="stat-item">
                                         <div className="stat-value">
-                                            {selectedProject.duration || '3'} mo
+                                            {selectedProject.duration || '3'} {selectedProject.business === 'thotilla' ? 'weeks' : 'mo'}
                                         </div>
                                         <div className="stat-label">Duration</div>
                                     </div>
@@ -690,36 +698,24 @@ const Portfolio = () => {
                                         <div className="stat-value">
                                             {getTechStack(selectedProject).length}
                                         </div>
-                                        <div className="stat-label">Technologies</div>
+                                        <div className="stat-label">Tools</div>
                                     </div>
                                 </div>
 
-                                {/* Action Buttons */}
-                                <div className="project-actions">
-                                    <button 
-                                        className="primary-btn"
-                                        onClick={() => selectedProject.liveUrl && handleExternalLink(selectedProject.liveUrl)}
-                                        disabled={!selectedProject.liveUrl}
-                                        style={{ backgroundColor: getBusinessColor(selectedProject.business), borderColor: getBusinessColor(selectedProject.business) }}
-                                    >
-                                        {selectedProject.liveUrl ? 'Visit Live Site' : 'Coming Soon'}
-                                    </button>
-                                    <button 
-                                        className="secondary-btn"
-                                        onClick={() => selectedProject.githubUrl && handleExternalLink(selectedProject.githubUrl)}
-                                        disabled={!selectedProject.githubUrl}
-                                        style={{ borderColor: getBusinessColor(selectedProject.business), color: getBusinessColor(selectedProject.business) }}
-                                    >
-                                        View Code
-                                    </button>
-                                </div>
+                                {selectedProject.teamRoles && (
+                                    <div className="team-roles-section">
+                                        <div className="team-roles">
+                                            <strong>Team:</strong>
+                                            {selectedProject.teamRoles}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* Gallery Lightbox */}
             {selectedProject && (
                 <div className={`gallery-lightbox ${isLightboxOpen ? 'active' : ''}`}>
                     <button className="close-lightbox" onClick={closeLightbox}>
@@ -731,6 +727,14 @@ const Portfolio = () => {
                             src={getAllProjectImages(selectedProject)[lightboxIndex]} 
                             alt={`${selectedProject.title} - ${lightboxIndex + 1}`}
                             className="lightbox-image"
+                            onError={(e) => {
+                                e.target.style.backgroundColor = '#222';
+                                e.target.style.minHeight = '300px';
+                                e.target.style.display = 'flex';
+                                e.target.style.alignItems = 'center';
+                                e.target.style.justifyContent = 'center';
+                                e.target.innerHTML = '<div style="color: #666; font-size: 16px;">Image not found</div>';
+                            }}
                         />
                         
                         <div className="lightbox-nav">

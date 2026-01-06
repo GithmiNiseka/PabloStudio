@@ -1,7 +1,7 @@
-/* Contact.css - Black & White Theme with Animations */
+/* Contact.css - Black, Red & White Theme with Animations */
 .contact-page {
-    background: #ffffff;
-    color: #000000;
+    background: #000000;
+    color: #ffffff;
     min-height: 100vh;
     position: relative;
 }
@@ -14,8 +14,8 @@
 
 /* Hero Section - More space, larger text */
 .contact-hero {
-    padding: 150px 0 20px; /* Increased padding for more space */
-    border-bottom: 1px solid #e0e0e0;
+    padding: 150px 0 20px;
+    border-bottom: 1px solid #ff0000;
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -27,25 +27,28 @@
 }
 
 .contact-title {
-    font-size: 6.5rem !important; /* Much larger */
-    font-weight: 600;
+    font-size: 6.5rem !important;
+    font-weight: 400 !important; /* Reduced to original weight */
     letter-spacing: -0.02em;
     margin-bottom: 25px;
     line-height: 1.1;
+    color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(255, 0, 0, 0.3);
 }
 
 .contact-description {
-    font-size: 1.3rem !important; /* Larger subtitle */
-    color: #666;
+    font-size: 1.3rem !important;
+    color: #ffffff !important;
     max-width: 800px;
     line-height: 1.5;
-    font-weight: 300;
+    font-weight: 300 !important; /* Back to original weight */
+    opacity: 0.9;
 }
 
 /* Contact Columns Layout - Animated */
 .contact-grid-section {
     padding: 80px 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #ff0000;
     opacity: 0;
     transform: translateY(40px);
     transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
@@ -59,7 +62,7 @@
 .contact-columns {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
-    gap: 100px; /* Increased gap */
+    gap: 100px;
     align-items: start;
 }
 
@@ -71,10 +74,10 @@
 
 /* Column Titles - Larger */
 .column-title {
-    font-size: 2.2rem; /* Larger */
-    font-weight: 300;
+    font-size: 2.2rem;
+    font-weight: 300; /* Back to original */
     margin-bottom: 15px;
-    color: #000;
+    color: #ffffff;
 }
 
 /* Contact Details with hover animations */
@@ -83,52 +86,74 @@
     flex-direction: column;
     gap: 10px;
     padding-bottom: 30px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #333333;
     transition: all 0.3s ease;
 }
 
 .contact-detail:hover {
     padding-left: 10px;
-    border-color: #000;
+    border-color: #ff0000;
 }
 
 .contact-detail:last-of-type {
-    border-bottom: none;
+    border-bottom: none !important;
 }
 
 .contact-label {
-    font-size: 0.85rem; /* Slightly larger */
-    color: #888;
+    font-size: 0.85rem;
+    color: #ff6b6b;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    font-weight: 500;
+    font-weight: 500; /* Back to original */
 }
 
-/* Clickable Elements with Animation */
+/* Clickable Elements with Animation - PROPER FIX */
 .clickable {
     position: relative;
     cursor: pointer;
     transition: all 0.3s ease;
+    color: #ffffff;
+    display: inline-block; /* Makes underline match text width */
+    text-decoration: none;
 }
 
-.clickable::before {
+/* White underline on hover - only for text links */
+.clickable:not(.faq-question)::before {
     content: '';
     position: absolute;
     bottom: -2px;
     left: 0;
     width: 0;
     height: 1px;
-    background: #000;
+    background: #ffffff; /* WHITE underline */
     transition: width 0.3s ease;
 }
 
 .clickable:hover::before {
-    width: 100%;
+    width: 30%;
 }
 
 .clickable:hover {
-    color: #000;
+    color: #ffffff; /* Keep white on hover */
     transform: translateX(5px);
+}
+
+/* Special for links that should be red on hover */
+.contact-value.clickable:hover,
+.social-link.clickable:hover {
+    color: #ffffff !important; /* Red on hover for these */
+}
+
+/* White underline for red-hover links too */
+.contact-value.clickable::before,
+.social-link.clickable::before {
+    background: #ffffff; /* White underline */
+}
+
+/* Red underline on hover for red-hover links */
+.contact-value.clickable:hover::before,
+.social-link.clickable:hover::before {
+    background: #ff0000; /* Red underline on hover */
 }
 
 .clickable.clicked {
@@ -148,11 +173,15 @@
 }
 
 .contact-value {
-    font-size: 1.3rem; /* Larger */
-    color: #000;
+    font-size: 1.3rem;
+    color: #ffffff;
     text-decoration: none;
     line-height: 1.4;
     transition: all 0.3s ease;
+}
+
+a.contact-value {
+    display: inline-block;
 }
 
 /* Social Links */
@@ -163,10 +192,11 @@
 }
 
 .social-link {
-    font-size: 1.2rem; /* Larger */
-    color: #000;
+    font-size: 1.2rem;
+    color: #ffffff;
     text-decoration: none;
     padding: 5px 0;
+    display: inline-block;
 }
 
 /* Map Column - Animated */
@@ -184,18 +214,20 @@
 
 .map-container {
     width: 100%;
-    height: 450px; /* Taller map */
+    height: 450px;
     border-radius: 8px;
     overflow: hidden;
-    filter: grayscale(100%) contrast(120%);
+    filter: grayscale(100%) contrast(120%) invert(1);
     margin-bottom: 10px;
     transition: all 0.5s ease;
+    border: 1px solid #333333;
 }
 
 .map-container:hover {
-    filter: grayscale(50%) contrast(110%);
+    filter: grayscale(50%) contrast(110%) invert(1);
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
+    border-color: #ff0000;
 }
 
 .map-container iframe {
@@ -205,16 +237,16 @@
 }
 
 .map-note {
-    font-size: 0.9rem; /* Slightly larger */
-    color: #666;
+    font-size: 0.9rem;
+    color: #ff6b6b;
     text-align: center;
     margin-top: 15px;
 }
 
 /* FAQ Section - Animated */
 .faq-section {
-    padding: 100px 0; /* More space */
-    border-bottom: 1px solid #e0e0e0;
+    padding: 100px 0;
+    border-bottom: 1px solid #ff0000;
     opacity: 0;
     transform: translateY(40px);
     transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s;
@@ -230,44 +262,46 @@
 }
 
 .faq-title {
-    font-size: 2.5rem; /* Larger */
-    font-weight: 300;
+    font-size: 2.5rem;
+    font-weight: 300; /* Back to original */
     margin-bottom: 15px;
-    color: #000;
+    color: #ffffff !important;
 }
 
 .faq-subtitle {
-    font-size: 1.1rem; /* Larger */
-    color: #666;
+    font-size: 1.1rem;
+    color: #ffffff;
+    font-weight: 300;
+    opacity: 0.8;
 }
 
 .faq-questions {
-    max-width: 900px; /* Wider */
+    max-width: 900px;
     margin: 0 auto;
 }
 
 .faq-item {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #606060 !important;
     transition: all 0.3s ease;
 }
 
-.faq-item:hover {
-    background: rgba(0, 0, 0, 0.01);
+.faq-item:last-child {
+    border-bottom: 1px solid #bababa; /* Normal border for last */
 }
 
-.faq-item:last-child {
-    border-bottom: none;
+.faq-item:hover {
+    background: rgba(255, 0, 0, 0.05);
 }
 
 .faq-question {
     width: 100%;
-    padding: 30px 0; /* More padding */
+    padding: 30px 0;
     background: transparent;
     border: none;
     text-align: left;
-    font-size: 1.4rem; /* Larger */
+    font-size: 1.4rem;
     font-weight: 400;
-    color: #000;
+    color: #ffffff !important;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -275,29 +309,41 @@
     transition: all 0.3s ease;
 }
 
+/* NO UNDERLINE FOR FAQ QUESTIONS */
+.faq-question::before {
+    display: none !important;
+}
+
 .faq-question:hover {
-    color: #000;
+    color: #ff0000 !important;
     padding-left: 10px;
 }
 
 .faq-question.active {
-    color: #000;
+    color: #ff0000 !important;
 }
 
 .question-text {
     flex: 1;
     padding-right: 30px;
+    color: inherit;
 }
 
 .expand-icon {
-    font-size: 2rem; /* Larger */
+    font-size: 2rem;
     font-weight: 300;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     flex-shrink: 0;
+    color: #ff0000;
+}
+
+.faq-question:hover .expand-icon {
+    color: #ff0000;
 }
 
 .faq-question.active .expand-icon {
     transform: rotate(180deg);
+    color: #ff0000;
 }
 
 .faq-answer {
@@ -312,10 +358,11 @@
 
 .answer-content {
     padding: 0 0 30px 0;
-    font-size: 1.1rem; /* Larger */
-    color: #666;
+    font-size: 1.1rem;
+    color: #ffffff !important;
     line-height: 1.7;
     animation: fadeIn 0.5s ease;
+    opacity: 0.9;
 }
 
 @keyframes fadeIn {
@@ -333,18 +380,18 @@
     margin: 0;
 }
 
-/* Floating WhatsApp with Fixed Animation */
+/* Floating WhatsApp - SIMPLE FIX */
 .floating-whatsapp {
     position: fixed;
     bottom: 40px;
     right: 40px;
-    background: #000;
-    color: #fff;
+    background: #ff0000;
+    color: #ffffff;
     border-radius: 50px;
     display: flex;
     align-items: center;
     text-decoration: none;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 25px rgba(255, 0, 0, 0.3);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
     z-index: 1000;
@@ -353,14 +400,15 @@
     padding: 0;
 }
 
-.floating-whatsapp:hover {
-    width: 320px;
-    background: #111;
-    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.4);
-    padding: 0;
+/* HOVER STATE - EXPANDS */
+.floating-whatsapp:hover,
+.floating-whatsapp.hover {
+    width: 320px !important;
+    background: #cc0000;
+    box-shadow: 0 8px 35px rgba(255, 0, 0, 0.4);
 }
 
-/* WhatsApp Icon Container */
+/* WhatsApp Icon */
 .whatsapp-icon-container {
     width: 70px;
     height: 70px;
@@ -368,40 +416,42 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: all 0.3s ease;
     padding: 0;
-}
-
-.floating-whatsapp:hover .whatsapp-icon-container {
-    transform: scale(1.1) rotate(5deg);
 }
 
 .whatsapp-icon {
     width: 36px;
     height: 36px;
-    color: #fff;
-    transition: all 0.3s ease;
+    color: #ffffff;
+    transition: transform 0.3s ease;
 }
 
-/* WhatsApp Text - COMPLETELY FIXED */
+.floating-whatsapp:hover .whatsapp-icon,
+.floating-whatsapp.hover .whatsapp-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* WhatsApp Text */
 .whatsapp-text {
     display: flex;
     flex-direction: column;
-    padding: 0 25px 0 0;
+    padding-right: 25px;
     opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+    transform: translateX(-20px);
+    transition: all 0.4s ease 0.1s;
     white-space: nowrap;
-    width: 0;
-    overflow: hidden;
     visibility: hidden;
+    max-width: 0;
+    overflow: hidden;
 }
 
-.floating-whatsapp:hover .whatsapp-text {
-    opacity: 1;
-    transform: translateX(0);
-    width: auto;
-    visibility: visible;
+/* SHOW TEXT ON HOVER */
+.floating-whatsapp:hover .whatsapp-text,
+.floating-whatsapp.hover .whatsapp-text {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    visibility: visible !important;
+    max-width: 250px !important;
 }
 
 .text-title {
@@ -410,15 +460,22 @@
     margin-bottom: 2px;
     letter-spacing: 0.02em;
     white-space: nowrap;
+    color: #ffffff;
 }
 
 .text-message {
     font-size: 0.85rem;
-    opacity: 0.8;
+    opacity: 0.9;
     white-space: nowrap;
+    color: #ffffff;
 }
 
-/* Floating Button Animation */
+/* Remove the old clickable class interference */
+.floating-whatsapp.clicked {
+    animation: none !important;
+}
+
+/* Floating Animation */
 @keyframes float {
     0%, 100% {
         transform: translateY(0);
@@ -590,170 +647,5 @@
     
     .text-message {
         font-size: 0.8rem;
-    }
-}
-/* Add this to your Contact.css - Just the WhatsApp section */
-
-/* Floating WhatsApp - SIMPLE FIX */
-.floating-whatsapp {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    background: #000;
-    color: #fff;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
-    z-index: 1000;
-    width: 70px;
-    height: 70px;
-    padding: 0;
-}
-
-/* HOVER STATE - EXPANDS */
-.floating-whatsapp:hover,
-.floating-whatsapp.hover {
-    width: 320px !important;
-    background: #111;
-    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.4);
-}
-
-/* WhatsApp Icon */
-.whatsapp-icon-container {
-    width: 70px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    padding: 0;
-}
-
-.whatsapp-icon {
-    width: 36px;
-    height: 36px;
-    color: #fff;
-    transition: transform 0.3s ease;
-}
-
-.floating-whatsapp:hover .whatsapp-icon,
-.floating-whatsapp.hover .whatsapp-icon {
-    transform: scale(1.1) rotate(5deg);
-}
-
-/* WhatsApp Text */
-.whatsapp-text {
-    display: flex;
-    flex-direction: column;
-    padding-right: 25px;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: all 0.4s ease 0.1s;
-    white-space: nowrap;
-    visibility: hidden;
-    max-width: 0;
-    overflow: hidden;
-}
-
-/* SHOW TEXT ON HOVER */
-.floating-whatsapp:hover .whatsapp-text,
-.floating-whatsapp.hover .whatsapp-text {
-    opacity: 1 !important;
-    transform: translateX(0) !important;
-    visibility: visible !important;
-    max-width: 250px !important;
-}
-
-.text-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin-bottom: 2px;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-}
-
-.text-message {
-    font-size: 0.85rem;
-    opacity: 0.8;
-    white-space: nowrap;
-}
-
-/* Remove the old clickable class interference */
-.floating-whatsapp.clicked {
-    animation: none !important;
-}
-
-/* Floating Animation */
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-8px);
-    }
-}
-
-.floating-whatsapp {
-    animation: float 4s ease-in-out infinite;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .floating-whatsapp {
-        bottom: 25px;
-        right: 25px;
-        width: 60px;
-        height: 60px;
-    }
-    
-    .floating-whatsapp:hover,
-    .floating-whatsapp.hover {
-        width: 280px !important;
-    }
-    
-    .whatsapp-icon-container {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .whatsapp-icon {
-        width: 30px;
-        height: 30px;
-    }
-    
-    .whatsapp-text {
-        padding-right: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .floating-whatsapp {
-        bottom: 20px;
-        right: 20px;
-        width: 55px;
-        height: 55px;
-    }
-    
-    .floating-whatsapp:hover,
-    .floating-whatsapp.hover {
-        width: 250px !important;
-    }
-    
-    .whatsapp-icon-container {
-        width: 55px;
-        height: 55px;
-    }
-    
-    .whatsapp-icon {
-        width: 26px;
-        height: 26px;
-    }
-    
-    .whatsapp-text {
-        padding-right: 15px;
     }
 }

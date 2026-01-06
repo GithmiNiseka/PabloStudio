@@ -1,45 +1,33 @@
 // src/components/OwnerSignature.jsx
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { gsap } from 'gsap';
+import React from 'react';
 import './OwnerSignature.css';
 
 const OwnerSignature = () => {
-    const signatureRef = useRef(null);
+  // Function to handle click - navigate to owner's profile
+  const handleOwnerClick = (e) => {
+    e.preventDefault();
+    // You can change this URL to the actual owner's profile page
+    window.open('https://yourdomain.com/owner-profile', '_blank');
+    // Or if you want to navigate within your app:
+    // window.location.href = '/owner-profile';
+  };
 
-    useEffect(() => {
-        if (signatureRef.current) {
-            gsap.fromTo(signatureRef.current,
-                { 
-                    x: 100, 
-                    opacity: 0,
-                    scale: 0.9 
-                },
-                { 
-                    x: 0, 
-                    opacity: 1, 
-                    scale: 1,
-                    duration: 1, 
-                    delay: 1.5, 
-                    ease: "power3.out" 
-                }
-            );
-        }
-    }, []);
-
-    return (
-        <div className="owner-signature-simple" ref={signatureRef}>
-            <Link 
-                to="/profile" 
-                className="owner-signature-link-simple"
-                title="Visit Sugath Sanjeewa's Profile"
-            >
-                <div className="vertical-text-simple">
-                    SUGATH SANJEEWA
-                </div>
-            </Link>
+  return (
+    <div className="owner-signature">
+      <a 
+        href="https://yourdomain.com/owner-profile" 
+        className="owner-signature-link"
+        onClick={handleOwnerClick}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Owner Profile - Pablo Suagth Sunjeewa"
+      >
+        <div className="vertical-text">
+          Owner| Pablo Suagth Sunjeewa
         </div>
-    );
+      </a>
+    </div>
+  );
 };
 
 export default OwnerSignature;

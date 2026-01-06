@@ -12,30 +12,34 @@ const Contact = () => {
     faq: false
   });
   
-  const [whatsappHover, setWhatsappHover] = useState(false); // NEW: Track hover state
+  const [whatsappHover, setWhatsappHover] = useState(false);
 
   const heroRef = useRef(null);
   const contactRef = useRef(null);
   const mapRef = useRef(null);
   const faqRef = useRef(null);
-  const whatsappRef = useRef(null); // NEW: Ref for WhatsApp button
+  const whatsappRef = useRef(null);
 
   const faqData = [
     {
-      question: 'How long does a project usually take?',
-      answer: 'Project durations vary: Small décor items & souvenirs: 2–7 days, Wall murals & interior installations: 1–4 weeks, Large institutional projects: 4–8+ weeks. We provide specific timelines after consultation.'
+      question: 'What services does ePablo.lk offer?',
+      answer: 'ePablo.lk specializes in custom wall art, interior murals, decorative installations, and personalized handcrafted items. We work with residential spaces, commercial establishments, and institutional projects to create unique artistic environments.'
     },
     {
-      question: 'Do you work on large institutional projects?',
-      answer: 'Absolutely! We have experience decorating large-scale spaces such as hospital wards, school walls, office interiors, and public areas. We tailor each design to match the mood and purpose of the space.'
+      question: 'How do I request a custom design or mural?',
+      answer: 'Simply contact us via phone, email, or WhatsApp with your project details. We\'ll schedule a consultation to discuss your vision, space requirements, budget, and timeline. We provide digital mockups before starting any project.'
     },
     {
-      question: 'What materials do you use?',
-      answer: 'We use high-quality, sustainable, and eco-friendly materials such as natural paints, wood, canvas, hand-crafted media, and zero-plastic packaging whenever possible.'
+      question: 'Do you work with international clients?',
+      answer: 'Yes! We accept international commissions and ship our products worldwide. For large installations outside Sri Lanka, we can work remotely with local teams or travel for key phases of the project.'
     },
     {
-      question: 'Do you ship products outside Sri Lanka?',
-      answer: 'Yes, international shipping is available for our products and selected handcrafted items. Shipping fees and delivery times vary by destination.'
+      question: 'What is your pricing structure?',
+      answer: 'Pricing varies based on project size, complexity, materials, and timeline. Small decorative items start from LKR 5,000, wall murals from LKR 50,000, and large installations are quoted individually. We provide detailed estimates after consultation.'
+    },
+    {
+      question: 'How long does shipping take within Sri Lanka?',
+      answer: 'Local delivery in Colombo and suburbs: 1-3 days. Other major cities: 3-5 days. Rural areas: 5-7 days. For large installations, we coordinate delivery and installation together with our team.'
     }
   ];
 
@@ -43,7 +47,6 @@ const Contact = () => {
     setOpenQuestion(openQuestion === index ? null : index);
   };
 
-  // Intersection Observer for scroll animations
   useEffect(() => {
     const observerOptions = {
       threshold: 0.1,
@@ -79,7 +82,6 @@ const Contact = () => {
       <Nav />
       
       <div className="contact-layout">
-        {/* Hero Section with more space */}
         <section 
           ref={heroRef}
           data-section="hero"
@@ -91,14 +93,12 @@ const Contact = () => {
           </p>
         </section>
 
-        {/* Contact Grid in Column Layout */}
         <section 
           ref={contactRef}
           data-section="contact"
           className={`contact-grid-section ${isVisible.contact ? 'visible' : ''}`}
         >
           <div className="contact-columns">
-            {/* Left Column - Contact Details */}
             <div className="contact-column">
               <h2 className="column-title">Get in Touch</h2>
               
@@ -164,7 +164,6 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Right Column - Map */}
             <div 
               ref={mapRef}
               data-section="map"
@@ -190,7 +189,6 @@ const Contact = () => {
           </div>
         </section>
 
-        {/* FAQ Section */}
         <section 
           ref={faqRef}
           data-section="faq"
@@ -228,7 +226,6 @@ const Contact = () => {
         </section>
       </div>
 
-      {/* Fixed Floating WhatsApp with Text Toggle */}
       <a 
         ref={whatsappRef}
         href="https://wa.me/94773858512" 
@@ -237,8 +234,6 @@ const Contact = () => {
         onMouseEnter={() => setWhatsappHover(true)}
         onMouseLeave={() => setWhatsappHover(false)}
         onClick={(e) => {
-          // Don't add clicked class - it interferes with hover
-          // Just open WhatsApp link
           window.open(e.currentTarget.href, '_blank');
         }}
       >
